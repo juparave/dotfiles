@@ -8,8 +8,8 @@
 
 call plug#begin()
 
-Plug 'https://github.com/vim-airline/vim-airline' " Status bar
-
+Plug 'https://github.com/vim-airline/vim-airline'  " Status bar
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " Golang plug in
 
 set encoding=UTF-8
 
