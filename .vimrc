@@ -12,7 +12,8 @@ endif
 
 let g:vim_bootstrap_langs = "go,html,python,typescript"
 let g:vim_bootstrap_editor = "vim"				" nvim or vim
-let g:vim_bootstrap_theme = "molokai"
+"let g:vim_bootstrap_theme = "molokai"
+let g:vim_bootstrap_theme = "gruvbox"
 let g:vim_bootstrap_frams = ""
 
 if !filereadable(vimplug_exists)
@@ -49,8 +50,9 @@ Plug 'dense-analysis/ale'
 Plug 'Yggdroot/indentLine'
 Plug 'editor-bootstrap/vim-bootstrap-updater'
 Plug 'tpope/vim-rhubarb' " required by fugitive to :Gbrowse
-Plug 'tomasr/molokai'
-
+"Plug 'tomasr/molokai'
+Plug 'morhetz/gruvbox'
+Plug 'git@github.com:Valloric/YouCompleteMe.git'
 
 if isdirectory('/usr/local/opt/fzf')
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
@@ -117,6 +119,10 @@ filetype plugin indent on
 "*****************************************************************************
 "" Basic Setup
 "*****************************************************************************"
+"" Vim
+set exrc              " read .vimrc on project folder if any
+set nowrap
+
 "" Encoding
 set encoding=utf-8
 set fileencoding=utf-8
@@ -133,7 +139,7 @@ set shiftwidth=4
 set expandtab
 
 "" Map leader to ,
-let mapleader=','
+let mapleader=' '
 
 "" Enable hidden buffers
 set hidden
@@ -143,6 +149,7 @@ set hlsearch
 set incsearch
 set ignorecase
 set smartcase
+set nohlsearch        " remove highlight after search
 
 set fileformats=unix,dos,mac
 
@@ -164,10 +171,12 @@ let g:session_command_aliases = 1
 syntax on
 set ruler
 set number
+set colorcolumn=80
+set signcolumn=yes
 
 let no_buffers_menu=1
-colorscheme molokai
-
+"colorscheme molokai
+colorscheme gruvbox
 
 " Better command line completion 
 set wildmenu
@@ -214,7 +223,7 @@ endif
 "" Disable the blinking cursor.
 set gcr=a:blinkon0
 
-set scrolloff=3
+set scrolloff=8
 
 
 "" Status bar
@@ -616,3 +625,8 @@ else
   let g:airline_symbols.readonly = ''
   let g:airline_symbols.linenr = ''
 endif
+
+" YCM
+nnoremap <silent> <Leader>gd :YcmCompleter GoTo<CR>
+nnoremap <silent> <Leader>gf :YcmCompleter FixIt<CR>
+
