@@ -78,6 +78,9 @@ Plug 'honza/vim-snippets'
 "" Custom bundles
 "*****************************************************************************
 
+"" Wakatime
+Plug 'wakatime/vim-wakatime'
+
 " go
 "" Go Lang Bundle
 Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
@@ -629,4 +632,7 @@ endif
 " YCM
 nnoremap <silent> <Leader>gd :YcmCompleter GoTo<CR>
 nnoremap <silent> <Leader>gf :YcmCompleter FixIt<CR>
+
+" Notetaker
+"autocmd BufWritePost *note-*.md silent !~/.dotfiles/bin/buildNote %:p
 
