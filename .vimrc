@@ -176,6 +176,7 @@ set ruler
 set number
 set colorcolumn=80
 set signcolumn=yes
+set cursorline=yes
 
 let no_buffers_menu=1
 "colorscheme molokai
