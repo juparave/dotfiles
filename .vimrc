@@ -254,6 +254,7 @@ endif
 
 " vim-airline
 let g:airline_theme = 'powerlineish'
+" let g:airline_theme = 'gruvbox'
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -637,3 +638,7 @@ nnoremap <silent> <Leader>gf :YcmCompleter FixIt<CR>
 " Notetaker
 "autocmd BufWritePost *note-*.md silent !~/.dotfiles/bin/buildNote %:p
 
+" remaps
+inoremap {<CR> {<CR>}<Esc>ko
+inoremap [<CR> [<CR>]<Esc>ko
+inoremap (<CR> (<CR>)<Esc>ko
