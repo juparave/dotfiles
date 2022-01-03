@@ -104,6 +104,8 @@ Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
 
+" syntax with polyglot
+Plug 'sheerun/vim-polyglot'
 
 "*****************************************************************************
 "*****************************************************************************
