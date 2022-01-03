@@ -52,7 +52,9 @@ Plug 'editor-bootstrap/vim-bootstrap-updater'
 Plug 'tpope/vim-rhubarb' " required by fugitive to :Gbrowse
 "Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
-Plug 'git@github.com:Valloric/YouCompleteMe.git'
+"Plug 'git@github.com:Valloric/YouCompleteMe.git'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 
 if isdirectory('/usr/local/opt/fzf')
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
@@ -146,7 +148,7 @@ set expandtab
 "" Map leader to ,
 let mapleader=' '
 
-"" Enable hidden buffers
+"" Enable hidden buffers. Allow buffers to have changes without being displayed
 set hidden
 
 "" Searching
@@ -477,6 +479,9 @@ vnoremap K :m '<-2<CR>gv=gv
 "" Open current line on GitHub
 nnoremap <Leader>o :.Gbrowse<CR>
 
+" \R reloads ~/.vimrc
+nnoremap <Bslash>R :<C-U>source $MYVIMRC<CR>
+
 "*****************************************************************************
 "" Custom configs
 "*****************************************************************************
@@ -639,8 +644,8 @@ else
 endif
 
 " YCM
-nnoremap <silent> <Leader>gd :YcmCompleter GoTo<CR>
-nnoremap <silent> <Leader>gf :YcmCompleter FixIt<CR>
+"nnoremap <silent> <Leader>gd :YcmCompleter GoTo<CR>
+"nnoremap <silent> <Leader>gf :YcmCompleter FixIt<CR>
 
 " Notetaker
 "autocmd BufWritePost *note-*.md silent !~/.dotfiles/bin/buildNote %:p
@@ -649,3 +654,6 @@ nnoremap <silent> <Leader>gf :YcmCompleter FixIt<CR>
 inoremap {<CR> {<CR>}<Esc>ko
 inoremap [<CR> [<CR>]<Esc>ko
 inoremap (<CR> (<CR>)<Esc>ko
+
+" Source any .vim files from ~/.vim/config
+runtime! config/*.vim
