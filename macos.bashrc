@@ -35,6 +35,9 @@ fi
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
+# telling tmux to support colors
+export TERM=xterm-256color
+
 ###-tns-completion-start-###
 if [ -f /Users/pablito/.tnsrc ]; then
     source /Users/pablito/.tnsrc
