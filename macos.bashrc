@@ -50,6 +50,32 @@ if type rg &> /dev/null; then
     export FZF_DEFAULT_OPTS='-m --height 50% --border'
 fi
 
+### Bash procedure to quickly change directory
+workon() {
+    if [[ -n $1 ]]; then
+        selected=$(find ~/workspace/python ~/workspace/go ~/workspace/angular -mindepth 1 -maxdepth 1 -type d | fzf --query $1)
+    else
+        selected=$(find ~/workspace/python ~/workspace/go ~/workspace/angular -mindepth 1 -maxdepth 1 -type d | fzf)
+    fi
+
+    if [[ -z $selected ]]; then
+        return 0
+    fi
+
+    cd $selected
+    actvenv
+}
+
+### Bash procedure to load python venv if exists on current directory
+actvenv() {
+    # get the most recent venv directory if any
+    venv=$(find . -maxdepth 1 -type d -name "*env" -exec stat -lt "%Y-%m-%d" {} \+ | cut -d' ' -f7- | sort -n | tail -1)
+    if [[ -n $venv ]]; then
+        echo "Found python venv at $venv, activating it"
+        source $venv/bin/activate
+    fi
+}
+
 ### Prompt
 export PS1="\[$(tput setaf 5)\]\u\[$(tput sgr0)\] at \[$(tput setaf 3)\]\h\[$(tput sgr0)\] in \[$(tput bold)\]\[$(tput setaf 2)\]\w\n\[$(tput sgr0)\]↳ \\$ \[$(tput sgr0)\]"
 ## Shortening paths in the Bash prompt
