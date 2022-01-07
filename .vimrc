@@ -556,8 +556,8 @@ augroup END
 
 " html
 " for html files, 2 spaces
-autocmd Filetype html setlocal ts=2 sw=2 expandtab
-
+autocmd Filetype html,tmpl setlocal ts=2 sw=2 expandtab
+autocmd Filetype html,tmpl,css EmmetInstall
 
 " python
 " vim-python
