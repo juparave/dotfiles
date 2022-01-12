@@ -1,3 +1,15 @@
+" Coc settings
+if !exists('g:coc_global_extensions')
+  let g:coc_global_extensions = [
+      \ 'coc-json',
+      \ 'coc-tsserver',
+      \ 'coc-html',
+      \ 'coc-css',
+      \ 'coc-go',
+      \ 'coc-python'
+      \ ]
+endif
+
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
