@@ -1,7 +1,11 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # reference https://www.youtube.com/watch?v=zB_3FIGRWRU
 # Config iTerm2 Hotkey to Shift-Ctrl-i
 #  
+
+# to add all paths and prevent errors with vim extensions requirementes
+source ~/.bash_profile
+
 noteFilename="$HOME/Dropbox/mynotes/src/note-$(date +%Y-%m-%d).md"
 
 if [ ! -f $noteFilename ]; then
