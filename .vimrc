@@ -12,8 +12,10 @@ endif
 
 let g:vim_bootstrap_langs = "go,html,python,typescript"
 let g:vim_bootstrap_editor = "vim"				" nvim or vim
-"let g:vim_bootstrap_theme = "molokai"
-let g:vim_bootstrap_theme = "gruvbox"
+" let g:vim_bootstrap_theme = "molokai"
+" let g:vim_bootstrap_theme = "gruvbox"
+" let g:vim_bootstrap_theme = "afterglow"
+let g:vim_bootstrap_theme = "anderson"
 let g:vim_bootstrap_frams = ""
 
 if !filereadable(vimplug_exists)
@@ -50,8 +52,13 @@ Plug 'dense-analysis/ale'
 Plug 'Yggdroot/indentLine'
 Plug 'editor-bootstrap/vim-bootstrap-updater'
 Plug 'tpope/vim-rhubarb' " required by fugitive to :Gbrowse
-"Plug 'tomasr/molokai'
+" themes
+Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
+Plug 'danilo-augusto/vim-afterglow'
+Plug 'gilgigilgil/anderson.vim'
+" end themes
+
 "Plug 'git@github.com:Valloric/YouCompleteMe.git'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -188,8 +195,10 @@ set signcolumn=yes
 set cursorline
 
 let no_buffers_menu=1
-"colorscheme molokai
-colorscheme gruvbox
+" colorscheme molokai
+" colorscheme gruvbox
+" colorscheme afterglow
+colorscheme anderson
 
 " Better command line completion 
 set wildmenu
@@ -262,8 +271,9 @@ if exists("*fugitive#statusline")
 endif
 
 " vim-airline
-let g:airline_theme = 'powerlineish'
+" let g:airline_theme = 'powerlineish'
 " let g:airline_theme = 'gruvbox'
+let g:airline_theme = 'afterglow'
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -399,7 +409,7 @@ let $FZF_DEFAULT_COMMAND =  "find * -path '*/\.*' -prune -o -path 'node_modules/
 
 " The Silver Searcher
 if executable('ag')
-  let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
+  let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git --ignore node_modules -g ""'
   set grepprg=ag\ --nogroup\ --nocolor
 endif
 
@@ -413,12 +423,14 @@ endif
 cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>e :FZF -m<CR>
+nnoremap <silent> <leader>f :Ag<CR>
 "Recovery commands from history through FZF
 nmap <leader>y :History:<CR>
 
 " snippets
 let g:UltiSnipsExpandTrigger="<c-tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-tab>"
+let g:UltiSnipsListSnippets="<c-l>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:UltiSnipsEditSplit="vertical"
 
@@ -543,6 +555,7 @@ augroup go
   au FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
   au FileType go nmap <C-g> :GoDecls<cr>
   au FileType go nmap <leader>dr :GoDeclsDir<cr>
+  au FileType go nmap <leader>ge :GoIfErr<cr>
   au FileType go imap <C-g> <esc>:<C-u>GoDecls<cr>
   au FileType go imap <leader>dr <esc>:<C-u>GoDeclsDir<cr>
   au FileType go nmap <leader>rb :<C-u>call <SID>build_go_files()<CR>
@@ -592,7 +605,7 @@ let python_highlight_all = 1
 
 " typescript
 let g:yats_host_keyword = 1
-
+autocmd BufNewFile,BufRead *.ts setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 
 "*****************************************************************************
@@ -650,10 +663,20 @@ endif
 " Notetaker
 "autocmd BufWritePost *note-*.md silent !~/.dotfiles/bin/buildNote %:p
 
-" remaps
+"" my remaps
+" auto closing brackets
 inoremap {<CR> {<CR>}<Esc>ko
 inoremap [<CR> [<CR>]<Esc>ko
 inoremap (<CR> (<CR>)<Esc>ko
+" Yank to the end of line
+nnoremap Y y$
+" Keeping it centered
+nnoremap n nzzzv
+nnoremap N Nzzzv
+nnoremap J mzJ`z
+
+" Open my vimrc in vertical tab
+map <leader>sv :vsplit $MYVIMRC<CR>
 
 " Source any .vim files from ~/.vim/config
 runtime! config/*.vim
