@@ -607,7 +607,21 @@ let python_highlight_all = 1
 let g:yats_host_keyword = 1
 autocmd BufNewFile,BufRead *.ts setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
-
+"" elm
+" ale
+:call extend(g:ale_linters, {
+    \'elm': ['elm_ls'], })
+let g:ale_elm_ls_use_global = 1
+let g:ale_elm_ls_elm_path = "/usr/local/bin/elm"
+" install elm-language-server
+" npm install -g @elm-tooling/elm-language-server
+let g:ale_elm_ls_executable = "/usr/local/bin/elm-language-server"
+" install elm-format
+" npm install -g elm-format
+let g:ale_elm_ls_elm_format_path = "/usr/local/bin/elm-format"
+" install elm-test
+" npm install -g elm-test
+let g:ale_elm_ls_elm_test_path = "/usr/local/bin/elm-test"
 "*****************************************************************************
 "*****************************************************************************
 
