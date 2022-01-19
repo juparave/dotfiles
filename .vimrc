@@ -101,6 +101,9 @@ Plug 'hail2u/vim-css3-syntax'
 Plug 'gko/vim-coloresque'
 Plug 'tpope/vim-haml'
 Plug 'mattn/emmet-vim'
+" vue ref: https://morioh.com/p/a135db8371b1
+Plug 'leafOfTree/vim-vue-plugin'
+
 
 
 " python
@@ -569,7 +572,7 @@ augroup END
 
 " html
 " for html files, 2 spaces
-autocmd Filetype html,tmpl setlocal ts=2 sw=2 expandtab
+autocmd Filetype html,tmpl,vue setlocal ts=2 sw=2 expandtab
 autocmd Filetype html,tmpl,css EmmetInstall
 
 " python
