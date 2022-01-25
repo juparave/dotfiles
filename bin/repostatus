@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+CUR=`pwd`
+red=`tput setaf 1`
+green=`tput setaf 2`
+yellow=`tput setaf 3`
+bold=`tput bold`
+reset=`tput sgr0`
+
+find . -type d -name ".git" -exec $SHELL -c '
+cd "$0"
+cd ..
+printf "\e[38;5;029m%s\e[0m\n" `pwd`
+if git status -s -u | grep -q .; then
+  current_status=" is ${red}dirty${reset} "
+  # echo "* Git Repository ${yellow}`pwd`${reset}${current_status}"
+fi
+if git status -uno | grep -q ahead; then
+  current_status+=" has ${bold}changes${reset} to push"
+fi
+echo $current_status
+' {} \;
