@@ -572,7 +572,7 @@ augroup END
 
 " html
 " for html files, 2 spaces
-autocmd Filetype html,tmpl,vue setlocal ts=2 sw=2 expandtab
+autocmd Filetype html,tmpl,vue setlocal tabstop=2 shiftwidth=2 expandtab
 autocmd Filetype html,tmpl,css EmmetInstall
 
 " python
