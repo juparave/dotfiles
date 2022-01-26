@@ -101,10 +101,12 @@ Plug 'hail2u/vim-css3-syntax'
 Plug 'gko/vim-coloresque'
 Plug 'tpope/vim-haml'
 Plug 'mattn/emmet-vim'
+"
 " vue ref: https://morioh.com/p/a135db8371b1
 Plug 'leafOfTree/vim-vue-plugin'
 
-
+" svelte
+Plug 'evanleck/vim-svelte', {'branch': 'main'}
 
 " python
 "" Python Bundle
@@ -625,6 +627,13 @@ let g:ale_elm_ls_elm_format_path = "/usr/local/bin/elm-format"
 " install elm-test
 " npm install -g elm-test
 let g:ale_elm_ls_elm_test_path = "/usr/local/bin/elm-test"
+
+"" svelte
+" To disable indentation within <script> and <style> tags
+let g:svelte_indent_script = 0
+let g:svelte_indent_style = 0
+let g:svelte_preprocessors = ['typescript']
+
 "*****************************************************************************
 "*****************************************************************************
 

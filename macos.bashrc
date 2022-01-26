@@ -53,9 +53,9 @@ fi
 ### Bash procedure to quickly change directory
 workon() {
     if [[ -n $1 ]]; then
-        selected=$(find ~/workspace/python ~/workspace/go ~/workspace/angular -mindepth 1 -maxdepth 1 -type d | fzf --query $1)
+        selected=$(find ~/workspace/python ~/workspace/go ~/workspace/angular ~/workspace/svelte ~/workspace/elm -mindepth 1 -maxdepth 1 -type d | fzf --query $1)
     else
-        selected=$(find ~/workspace/python ~/workspace/go ~/workspace/angular -mindepth 1 -maxdepth 1 -type d | fzf)
+        selected=$(find ~/workspace/python ~/workspace/go ~/workspace/angular ~/workspace/svelte ~/workspace/elm -mindepth 1 -maxdepth 1 -type d | fzf)
     fi
 
     if [[ -z $selected ]]; then
