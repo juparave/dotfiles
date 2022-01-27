@@ -69,7 +69,8 @@ workon() {
 ### Bash procedure to load python venv if exists on current directory
 actvenv() {
     # get the most recent venv directory if any
-    venv=$(find . -maxdepth 1 -type d -name "*env" -exec stat -lt "%Y-%m-%d" {} \+ | cut -d' ' -f7- | sort -n | tail -1)
+    # venv=$(find . -maxdepth 1 -type d -name "*env" -exec stat -lt "%Y-%m-%d" {} \+ | cut -d' ' -f7- | sort -n | tail -1)
+    venv=$(find . -maxdepth 1 -type d -name "*env" -exec stat -lt "%Y-%m-%d" {} \+ | cut -d' ' -f7- | head -1)
     if [[ -n $venv ]]; then
         echo "Found python venv at $venv, activating it"
         source $venv/bin/activate
