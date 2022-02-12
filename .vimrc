@@ -55,7 +55,7 @@ Plug 'editor-bootstrap/vim-bootstrap-updater'
 Plug 'tpope/vim-rhubarb' " required by fugitive to :Gbrowse
 " themes
 Plug 'tomasr/molokai'
-Plug 'morhetz/gruvbox'
+Plug 'gruvbox-community/gruvbox'
 Plug 'danilo-augusto/vim-afterglow'
 Plug 'gilgigilgil/anderson.vim'
 " end themes
