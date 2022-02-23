@@ -58,6 +58,7 @@ Plug 'tomasr/molokai'
 Plug 'gruvbox-community/gruvbox'
 Plug 'danilo-augusto/vim-afterglow'
 Plug 'gilgigilgil/anderson.vim'
+Plug 'arcticicestudio/nord-vim'
 " end themes
 
 "Plug 'git@github.com:Valloric/YouCompleteMe.git'
@@ -204,7 +205,8 @@ let no_buffers_menu=1
 " colorscheme molokai
 " colorscheme gruvbox
 " colorscheme afterglow
-colorscheme anderson
+" colorscheme anderson
+colorscheme nord
 
 " Better command line completion 
 set wildmenu
