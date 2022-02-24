@@ -15,7 +15,8 @@ let g:vim_bootstrap_editor = "vim"				" nvim or vim
 " let g:vim_bootstrap_theme = "molokai"
 " let g:vim_bootstrap_theme = "gruvbox"
 " let g:vim_bootstrap_theme = "afterglow"
-let g:vim_bootstrap_theme = "anderson"
+" let g:vim_bootstrap_theme = "anderson"
+let g:vim_bootstrap_theme = "nord"
 let g:vim_bootstrap_frams = ""
 
 if !filereadable(vimplug_exists)
@@ -205,8 +206,8 @@ let no_buffers_menu=1
 " colorscheme molokai
 " colorscheme gruvbox
 " colorscheme afterglow
-" colorscheme anderson
-colorscheme nord
+colorscheme anderson
+" colorscheme nord
 
 " Better command line completion 
 set wildmenu
@@ -282,6 +283,7 @@ endif
 " let g:airline_theme = 'powerlineish'
 " let g:airline_theme = 'gruvbox'
 let g:airline_theme = 'afterglow'
+" let g:airline_theme = 'nord'
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
