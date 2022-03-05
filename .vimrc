@@ -706,6 +706,12 @@ nnoremap n nzzzv
 nnoremap N Nzzzv
 nnoremap J mzJ`z
 
+"*****************************************************************************
+"" Macros
+"*****************************************************************************
+let @p=":w\<CR>:rightb vert terminal python %\<CR>"
+
+
 " Open my vimrc in vertical tab
 map <leader>sv :vsplit $MYVIMRC<CR>
 
