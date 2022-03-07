@@ -264,6 +264,8 @@ endif
 "" Disable the blinking cursor.
 set gcr=a:blinkon0
 
+set scrolloff=7
+
 au TermEnter * setlocal scrolloff=0
 au TermLeave * setlocal scrolloff=3
 

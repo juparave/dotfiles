@@ -254,7 +254,7 @@ endif
 "" Disable the blinking cursor.
 set gcr=a:blinkon0
 
-set scrolloff=8
+set scrolloff=7
 
 
 "" Status bar
