@@ -204,11 +204,12 @@ set cursorline
 
 let no_buffers_menu=1
 " colorscheme molokai
-" colorscheme gruvbox
+colorscheme gruvbox
 " colorscheme afterglow
-colorscheme anderson
+" colorscheme anderson
 " colorscheme nord
 
+set background=dark
 " Better command line completion 
 set wildmenu
 
@@ -281,8 +282,8 @@ endif
 
 " vim-airline
 " let g:airline_theme = 'powerlineish'
-" let g:airline_theme = 'gruvbox'
-let g:airline_theme = 'afterglow'
+let g:airline_theme = 'gruvbox'
+" let g:airline_theme = 'afterglow'
 " let g:airline_theme = 'nord'
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#ale#enabled = 1
@@ -711,6 +712,15 @@ nnoremap J mzJ`z
 "*****************************************************************************
 let @p=":w\<CR>:rightb vert terminal python %\<CR>"
 
+"*****************************************************************************
+"" Color inside tmux
+"*****************************************************************************
+
+if exists('+termguicolors') && ($TERM == "st-256color" || $TERM == "tmux-256color" || $TERM == "xterm-256color")
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set termguicolors
+endif
 
 " Open my vimrc in vertical tab
 map <leader>sv :vsplit $MYVIMRC<CR>
