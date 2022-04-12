@@ -6,7 +6,8 @@ if !exists('g:coc_global_extensions')
       \ 'coc-html',
       \ 'coc-css',
       \ 'coc-go',
-      \ 'coc-python'
+      \ 'coc-python',
+      \ 'coc-prettier'
       \ ]
 endif
 
@@ -133,4 +134,8 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 """ Go
 " Add missing imports on save
 autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
+
+""" Prettier
+" Setup Prettier command
+command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
 

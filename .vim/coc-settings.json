@@ -12,7 +12,7 @@
       "rootPatterns": ["elm.json"]
     }
   },
-  "coc.preferences.formatOnSaveFiletypes": ["elm"],
+  "coc.preferences.formatOnSaveFiletypes": ["elm", "css", "markdown", "typescript"],
   // If you use neovim you can enable codelenses with this
   "codeLens.enable": true
 }
