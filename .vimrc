@@ -126,6 +126,7 @@ Plug 'sheerun/vim-polyglot'
 
 "*****************************************************************************
 "*****************************************************************************
+Plug 'dhruvasagar/vim-zoom'
 
 "" Include user's extra bundle
 if filereadable(expand("~/.vimrc.local.bundles"))
@@ -642,6 +643,9 @@ let g:svelte_preprocessors = ['typescript']
 
 "*****************************************************************************
 "*****************************************************************************
+
+"" Vim-zoom
+set statusline+=%{zoom#statusline()}
 
 "" Include user's local vim config
 if filereadable(expand("~/.vimrc.local"))
