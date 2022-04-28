@@ -172,7 +172,7 @@ set hlsearch
 set incsearch
 set ignorecase
 set smartcase
-set nohlsearch        " remove highlight after search
+set nohlsearch          " remove highlight after search
 
 set fileformats=unix,dos,mac
 

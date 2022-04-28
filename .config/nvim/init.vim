@@ -38,6 +38,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
@@ -141,6 +142,14 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 
+" Flutter/Dart
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'natebosch/dartlang-snippets'
+Plug 'tpope/vim-projectionist'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'jiangmiao/auto-pairs'
+Plug 'dart-lang/dart-vim-plugin'
 "*****************************************************************************
 "*****************************************************************************
 
@@ -180,7 +189,7 @@ set expandtab
 "" Map leader to ,
 let mapleader=' '
 
-"" Enable hidden buffers
+"" Enable hidden buffers. Allow buffers to have changes without being displayed
 set hidden
 
 "" Searching
@@ -429,7 +438,7 @@ let $FZF_DEFAULT_COMMAND =  "find * -path '*/\.*' -prune -o -path 'node_modules/
 
 " The Silver Searcher
 if executable('ag')
-  let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
+  let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git --ignore node_modules -g ""'
   set grepprg=ag\ --nogroup\ --nocolor
 endif
 
@@ -579,6 +588,7 @@ augroup go
   au FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
   au FileType go nmap <C-g> :GoDecls<cr>
   au FileType go nmap <leader>dr :GoDeclsDir<cr>
+  au FileType go nmap <leader>ge :GoIfErr<cr>
   au FileType go imap <C-g> <esc>:<C-u>GoDecls<cr>
   au FileType go imap <leader>dr <esc>:<C-u>GoDeclsDir<cr>
   au FileType go nmap <leader>rb :<C-u>call <SID>build_go_files()<CR>
@@ -647,6 +657,12 @@ let g:vue_disable_pre_processors=1
 " vim vue plugin
 let g:vim_vue_plugin_load_full_syntax = 1
 
+" Dart/FLutter
+nnoremap <leader>fe :CocCommand flutter.emulators <CR>
+nnoremap <leader>fd :below new output:///flutter-dev <CR>
+
+let g:dart_format_on_save = 1
+let g:dartfmt_options = ['--fix', '--line-length 120']
 
 "*****************************************************************************
 "*****************************************************************************
@@ -712,3 +728,5 @@ nnoremap J mzJ`z
 " Open my vimrc in vertical tab
 map <leader>sv :vsplit $MYVIMRC<CR>
 
+" Source any .vim files from ~/.config/nvim/config
+runtime! config/*.vim
