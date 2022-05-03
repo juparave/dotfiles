@@ -1,0 +1,4 @@
+{
+    "codeLens.enable": true,
+    "coc.preferences.formatOnSaveFiletypes": ["elm", "css", "markdown", "typescript"]
+}
