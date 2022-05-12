@@ -1,0 +1,15 @@
+# run docker-compose -f phpmyadmin-compose.yml up
+# or run in command line
+# docker run --name my-phpmyadmin -d -e PMA_HOST=host.docker.internal -e PMA_PORT=3306 -e UPLOAD_LIMIT=16M -p 8080:80 phpmyadmin
+version: "3.9"
+services:
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: my-phpmyadmin
+    environment:
+      PMA_HOST: host.docker.internal
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 16M
+    ports:
+      - '8880:80'
+    network_mode: "host"
