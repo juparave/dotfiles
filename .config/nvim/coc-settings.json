@@ -1,4 +1,5 @@
 {
     "codeLens.enable": true,
-    "coc.preferences.formatOnSaveFiletypes": ["elm", "css", "markdown", "typescript"]
+    "coc.preferences.formatOnSaveFiletypes": ["elm", "css", "markdown", "typescript"],
+    "snippets.userSnippetsDirectory": "~/.config/nvim/snippets"
 }

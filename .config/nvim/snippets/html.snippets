@@ -1,0 +1,34 @@
+priority -50
+
+###########################################################################
+#                            TextMate Snippets                            #
+###########################################################################
+
+global !p
+def x(snip):
+	if snip.ft.startswith("x"):
+		snip.rv = '/'
+	else:
+		snip.rv = ""
+endglobal
+
+snippet doctype "HTML - 5.0 (doctype)" b
+<!DOCTYPE html>
+
+endsnippet
+
+########
+snippet html "HTML basic structure" b
+<!DOCTYPE html>
+<html lang="${1:es}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${2:`!p snip.rv = snip.basename.replace('-', ' ').capitalize()`}</title>
+</head>
+<body>
+   ${0:body} 
+</body>
+</html>
+endsnippet
