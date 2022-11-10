@@ -641,6 +641,10 @@ let g:svelte_indent_script = 0
 let g:svelte_indent_style = 0
 let g:svelte_preprocessors = ['typescript']
 
+"" XML
+" Format file with `gg=G` using xmllint
+au FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
+
 "*****************************************************************************
 "*****************************************************************************
 
