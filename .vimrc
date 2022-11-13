@@ -124,6 +124,10 @@ Plug 'HerringtonDarkholme/yats.vim'
 " syntax with polyglot
 Plug 'sheerun/vim-polyglot'
 
+" dart & flutter
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'thosakwe/vim-flutter'
+
 "*****************************************************************************
 "*****************************************************************************
 Plug 'dhruvasagar/vim-zoom'
@@ -409,7 +413,7 @@ nnoremap <silent> <S-t> :tabnew<CR>
 nnoremap <leader>. :lcd %:p:h<CR>
 
 "" Opens an edit command with the path of the currently edited file filled in
-noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
+"noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 
 "" Opens a tab edit command with the path of the currently edited file filled
 noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
