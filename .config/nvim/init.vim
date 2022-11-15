@@ -150,6 +150,7 @@ Plug 'tpope/vim-projectionist'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'dart-lang/dart-vim-plugin'
+Plug 'thosakwe/vim-flutter'
 "*****************************************************************************
 "*****************************************************************************
 
