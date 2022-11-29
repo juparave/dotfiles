@@ -13,7 +13,7 @@ set -o vi
 export HISTCONTROL=erasedups
 # resize history size
 export HISTSIZE=8000
-HISTFILESIZE=8000
+export HISTFILESIZE=8000
 # append to bash_history if Terminal.app quits
 shopt -s histappend
 # append to bash_history after each command is finished (multiple terminals)
@@ -70,7 +70,7 @@ workon() {
 actvenv() {
     # get the most recent venv directory if any
     # venv=$(find . -maxdepth 1 -type d -name "*env" -exec stat -lt "%Y-%m-%d" {} \+ | cut -d' ' -f7- | sort -n | tail -1)
-    venv=$(find . -maxdepth 1 -type d -name "*env" -exec stat -lt "%Y-%m-%d" {} \+ | cut -d' ' -f7- | head -1)
+    venv=$(find . -maxdepth 1 -type d -name "*env" -exec stat -lt "%Y-%m-%d" {} \+ | cut -d' ' -f7- | sort -nr | head -1)
     if [[ -n $venv ]]; then
         echo "Found python venv at $venv, activating it"
         source $venv/bin/activate
