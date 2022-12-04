@@ -12,11 +12,22 @@ vim.opt.autoread = true
 
 -- use spaces for tabs and whatnot
 vim.opt.tabstop = 2
+vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 2
 vim.opt.shiftround = true
 vim.opt.expandtab = true
 
+vim.opt.smartindent = true
+
 vim.opt.wrap = false
+
+-- Undo
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
+
+no_buffers_menu = 1
 
 -- Encoding
 vim.opt.encoding= 'utf-8'
@@ -24,7 +35,7 @@ vim.opt.fileencoding= 'utf-8'
 vim.opt.fileencodings= 'utf-8'
 
 -- Searching
-vim.opt.hlsearch = true
+vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -38,8 +49,12 @@ vim.opt.number = true
 vim.opt.colorcolumn = '+1'
 vim.opt.signcolumn = 'yes'
 vim.opt.cursorline = true
-
-no_buffers_menu = 1
+vim.o.termguicolors = true
+vim.opt.scrolloff = 7
+-- Font
+vim.opt.guifont="Hack:14"
+--vim.g.webdevicons_enable = 0
+--vim.g.webdevicons_enable_nerdtree = 1
 
 -- Mouse support
 vim.opt.mouse = 'a'
@@ -47,6 +62,16 @@ vim.opt.mousemodel = 'popup'
 
 -- Cursor
 --vim.opt.
+
+--- My remaps
+-- Auto closing brackets
+vim.keymap.set('i', '{<CR>', '{<CR>}<Esc>ko')
+vim.keymap.set('i', '(<CR>', '(<CR>)<Esc>ko')
+vim.keymap.set('i', '[<CR>', '[<CR>]<Esc>ko')
+
+-- Yank to the end of line
+vim.keymap.set('n', 'Y', 'y$')
+
 
 vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>')
 
@@ -68,8 +93,10 @@ vim.keymap.set('n', '<leader>h', ':<C-u>split<CR>')
 vim.keymap.set('n', '<leader>v', ':<C-u>vsplit<CR>')
 
 -- Move visual block
---- HELP !!! not working
-vim.keymap.set('n', 'J', ":m '>+1<CR>gv=gv")
-vim.keymap.set('n', 'K', ":m '<-2<CR>gv=gv")
+--- HELP !!! not working, added in `init.vim`
+-- vim.keymap.set('n', 'J', ":m '>+1<CR>gv=gv")
+-- vim.keymap.set('n', 'K', ":m '<-2<CR>gv=gv")
+vim.keymap.set('v', '<', '<gv')
+vim.keymap.set('v', '>', '>gv')
 
 -- print(vim.inspect(vim.opt.formatoptions:get()))

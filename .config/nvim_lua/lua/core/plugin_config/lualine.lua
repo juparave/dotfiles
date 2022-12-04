@@ -1,7 +1,8 @@
 require('lualine').setup {
   options = {
     -- icons_enabled = true,
-    theme = 'gruvbox',
+    --theme = 'gruvbox',
+    theme = 'jellybeans',
   },
   sections = {
     lualine_a = {
@@ -11,5 +12,10 @@ require('lualine').setup {
         path = 1,
       }
     }
-  }
+  },
+--   winbar = {
+--     lualine_a = {
+--       'buffers',
+--     }
+--   }
 }
