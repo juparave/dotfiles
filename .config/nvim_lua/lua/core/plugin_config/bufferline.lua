@@ -1,11 +1,12 @@
 -- required from plugins.lua
+-- ref https://github.com/akinsho/bufferline.nvim
 local M = {}
 
 function M.setup()
   require("bufferline").setup {
     options = {
       mode = "buffers",
-      numbers = "buffer_id",
+      --numbers = "buffer_id",
       diagnostics = "nvim_lsp",
       separator_style = "slant" or "padded_slant",
       show_tab_indicators = true,
