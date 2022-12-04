@@ -38,6 +38,28 @@ return require('packer').startup(function(use)
   }
 
   use 'tpope/vim-fugitive'
+
+  -- Better surroung
+  use { "tpope/vim-surround", event = "BufReadPre" }
+  use {
+    "Matt-A-Bennett/vim-surround-funk",
+    event = "BufReadPre",
+    config = function()
+      require("core.plugin_config.surroundfunk").setup()
+    end,
+    disable = true,
+  }
+
+  -- Buffer line
+  use {
+    "akinsho/nvim-bufferline.lua",
+    event = "BufReadPre",
+    wants = "nvim-web-devicons",
+    config = function()
+      require("core.plugin_config.bufferline").setup()
+    end,
+  }
+  
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then
