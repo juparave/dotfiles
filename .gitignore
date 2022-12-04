@@ -1,1 +1,5 @@
 .DS_Store
+.config/nvim/plugin
+.config/nvim/plugged
+.config/nvim/autoload/plug.vim
+.config/nvim_lua/plugin
