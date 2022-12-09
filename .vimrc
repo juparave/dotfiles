@@ -388,6 +388,10 @@ set autoread
 noremap <Leader>h :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
 
+"" Zoom like a Pro
+noremap Zz <c-w>_ \| <c-w>\|
+noremap Zo <c-w>=
+
 "" Git
 noremap <Leader>ga :Gwrite<CR>
 noremap <Leader>gc :Git commit --verbose<CR>
