@@ -85,3 +85,7 @@ export PROMPT_DIRTRIM=4
 ### Fortune and Cowsay
 exec fortune | cowsay -n
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+
+# Load Angular CLI autocompletion.
+#source <(ng completion script)
