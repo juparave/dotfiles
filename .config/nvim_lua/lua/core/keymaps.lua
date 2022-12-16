@@ -77,7 +77,7 @@ vim.opt.cursorline = true
 vim.o.termguicolors = true
 vim.opt.scrolloff = 7
 -- Font
-vim.opt.guifont="Hack:14"
+vim.opt.guifont="Inconsolata:16"
 --vim.g.webdevicons_enable = 0
 --vim.g.webdevicons_enable_nerdtree = 1
 
@@ -94,9 +94,9 @@ vim.keymap.set('i', '{<CR>', '{<CR>}<Esc>ko')
 vim.keymap.set('i', '(<CR>', '(<CR>)<Esc>ko')
 vim.keymap.set('i', '[<CR>', '[<CR>]<Esc>ko')
 
--- Yank to the end of line
+-- Special Yanks
 vim.keymap.set('n', 'Y', 'y$') -- Copy from cursor to end of line
-
+vim.keymap.set('n', 'x', '"_x') -- Do not yank with x
 
 vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>') -- clear highlights on search results
 
@@ -118,10 +118,16 @@ vim.keymap.set('n', '<leader>h', ':<C-u>split<CR>') -- horizontal split
 vim.keymap.set('n', '<leader>v', ':<C-u>vsplit<CR>') -- vertical split
 
 -- Move visual block
---- HELP !!! not working, added in `init.vim`
+vim.cmd [[vnoremap J :m '>+1<CR>gv=gv]]
+vim.cmd [[vnoremap K :m '<-2<CR>gv=gv]]
+-- having trouble to set it in lua
 -- vim.keymap.set('n', 'J', ":m '>+1<CR>gv=gv")
 -- vim.keymap.set('n', 'K', ":m '<-2<CR>gv=gv")
+
 vim.keymap.set('v', '<', '<gv') -- in visual mode, move block to the right
 vim.keymap.set('v', '>', '>gv') -- in visual mode, move block to the left
+
+-- Undotree
+vim.keymap.set('n', '<leader>u', ':UndotreeShow<CR>')
 
 -- print(vim.inspect(vim.opt.formatoptions:get()))
