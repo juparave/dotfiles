@@ -44,7 +44,7 @@ return require('packer').startup(function(use)
     tag = '0.1.0',
     requires = { { 'nvim-lua/plenary.nvim' } },
     config = function()
-      require('core.plugin_config.elescope').setup()
+      require('core.plugin_config.telescope').setup()
     end
   }
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
@@ -87,11 +87,10 @@ return require('packer').startup(function(use)
   use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
 
   -- LSP
-  use "neovim/nvim-lspconfig" -- Enable LSP
-  use "williamboman/nvim-lsp-installer" -- laguage server installer
-  use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
   use 'williamboman/mason.nvim'
   use 'williamboman/mason-lspconfig.nvim'
+  use "neovim/nvim-lspconfig" -- Enable LSP
+  use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
   --  use {
   --    "neovim/nvim-lspconfig",
   --    opt = true,
