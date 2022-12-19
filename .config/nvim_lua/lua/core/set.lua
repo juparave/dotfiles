@@ -11,9 +11,9 @@ vim.opt.cursorline = true
 vim.opt.autoread = true -- keep block cursor on insert mode
 
 -- use spaces for tabs and whatnot
-vim.opt.tabstop = 2
+vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 2
+vim.opt.shiftwidth = 4
 vim.opt.shiftround = true
 vim.opt.expandtab = true
 vim.opt.smarttab = true
@@ -34,7 +34,8 @@ vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 --  vim.fn.mkdir(vim.inspect(vim.opt.undodir:get()), "p")
 --end
 
-vim.opt.clipboard = "unnamedplus" -- Access system clipboard
+-- Clipboard
+-- vim.opt.clipboard = "unnamedplus" -- Access system clipboard
 
 no_buffers_menu = 1
 
@@ -74,7 +75,7 @@ vim.opt.number = true
 vim.opt.colorcolumn = '+1'
 vim.opt.signcolumn = 'yes'
 vim.opt.cursorline = true
-vim.o.termguicolors = true
+vim.opt.termguicolors = true
 vim.opt.scrolloff = 7
 -- Font
 vim.opt.guifont="Inconsolata:16"

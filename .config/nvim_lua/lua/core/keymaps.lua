@@ -31,13 +31,16 @@ vim.keymap.set('n', '<leader>v', ':<C-u>vsplit<CR>') -- vertical split
 vim.cmd [[vnoremap J :m '>+1<CR>gv=gv]]
 vim.cmd [[vnoremap K :m '<-2<CR>gv=gv]]
 -- having trouble to set it in lua
--- vim.keymap.set('n', 'J', ":m '>+1<CR>gv=gv")
--- vim.keymap.set('n', 'K', ":m '<-2<CR>gv=gv")
+-- vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+-- vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
 vim.keymap.set('v', '<', '<gv') -- in visual mode, move block to the right
 vim.keymap.set('v', '>', '>gv') -- in visual mode, move block to the left
 
 -- Undotree
 vim.keymap.set('n', '<leader>u', ':UndotreeShow<CR>')
+
+-- Paste without copying replaced text
+vim.keymap.set('x', '<leader>p', "\"_dP")
 
 -- print(vim.inspect(vim.opt.formatoptions:get()))
