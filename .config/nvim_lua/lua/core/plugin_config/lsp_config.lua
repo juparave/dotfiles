@@ -1,6 +1,6 @@
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "sumneko_lua", "gopls" }
+  ensure_installed = { "sumneko_lua", "gopls", "pyright" }
 })
 
 local on_attach = function(client, bufnr)
@@ -31,6 +31,11 @@ require("lspconfig").sumneko_lua.setup {
 }
 
 require("lspconfig").gopls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+
+require("lspconfig").pyright.setup {
   on_attach = on_attach,
   capabilities = capabilities,
 }
