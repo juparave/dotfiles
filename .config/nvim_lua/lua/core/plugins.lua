@@ -32,6 +32,9 @@ return require('packer').startup(function(use)
     'svrana/neosolarized.nvim',
     requires = { 'tjdevries/colorbuddy.nvim' }
   }
+  use 'folke/tokyonight.nvim'
+  use "EdenEast/nightfox.nvim"
+
   -- use 'arcticicestudio/nord-vim'
 
   use('nvim-treesitter/nvim-treesitter', {
@@ -43,9 +46,6 @@ return require('packer').startup(function(use)
     'nvim-telescope/telescope.nvim',
     tag = '0.1.0',
     requires = { { 'nvim-lua/plenary.nvim' } },
-    config = function()
-      require('core.plugin_config.telescope').setup()
-    end
   }
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
   use 'nvim-telescope/telescope-file-browser.nvim'
@@ -73,6 +73,18 @@ return require('packer').startup(function(use)
     end,
   }
 
+  -- which key
+  use {
+    "folke/which-key.nvim",
+    config = function()
+      require("which-key").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
+
   -- Cmp plugins
   use "hrsh7th/nvim-cmp" -- The completion plugin
   use "hrsh7th/cmp-buffer" -- buffer completions
@@ -86,68 +98,33 @@ return require('packer').startup(function(use)
   use "L3MON4D3/LuaSnip" --snippet engine
   use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
 
+  use "tpope/vim-commentary"
+
   -- LSP
   use 'williamboman/mason.nvim'
   use 'williamboman/mason-lspconfig.nvim'
-  use "neovim/nvim-lspconfig" -- Enable LSP
+  use 'neovim/nvim-lspconfig' -- Enable LSP
   use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
-  --  use {
-  --    "neovim/nvim-lspconfig",
-  --    opt = true,
-  --    wants = {
-  --      "nvim-lsp-installer",
-  --      "cmp-nvim-lsp",
-  --      "lua-dev.nvim",
-  --      "vim-illuminate",
-  --      "null-ls.nvim",
-  --      "schemastore.nvim",
-  --      "typescript.nvim",
-  --      "nvim-navic",
-  --    },
-  --    --config = function()
-  --    --  require("core.plugin_config.lsp").setup()
-  --    --end,
-  --    requires = {
-  --      "williamboman/nvim-lsp-installer",
-  --      "folke/lua-dev.nvim",
-  --      "RRethy/vim-illuminate",
-  --      "jose-elias-alvarez/null-ls.nvim",
-  --      {
-  --        "j-hui/fidget.nvim",
-  --        config = function()
-  --          require("fidget").setup {}
-  --        end,
-  --      },
-  --      "b0o/schemastore.nvim",
-  --      "jose-elias-alvarez/typescript.nvim",
-  --      {
-  --        "SmiteshP/nvim-navic",
-  --        config = function()
-  --          require("nvim-navic").setup {}
-  --        end,
-  --      },
-  --    },
-  --  }
 
-  -- Debugging
-  use 'mfussenegger/nvim-dap'
-  use 'leoluz/nvim-dap-go'
-  use 'rcarriga/nvim-dap-ui'
-  use 'theHamsta/nvim-dap-virtual-text'
-  use 'nvim-telescope/telescope-dap.nvim'
-
-  -- Misc
-  use 'windwp/nvim-autopairs'
-  use 'windwp/nvim-ts-autotag'
-  use 'norcalli/nvim-colorizer.lua'
-  use 'folke/zen-mode.nvim'
-  use({
-    "iamcco/markdown-preview.nvim",
-    run = function() vim.fn["mkdp#util#install"]() end,
-  })
-
-  use 'lewis6991/gitsigns.nvim'
-  use 'dinhhuy258/git.nvim' -- For git blame & browse
+--  -- Debugging
+--  use 'mfussenegger/nvim-dap'
+--  use 'leoluz/nvim-dap-go'
+--  use 'rcarriga/nvim-dap-ui'
+--  use 'theHamsta/nvim-dap-virtual-text'
+--  use 'nvim-telescope/telescope-dap.nvim'
+--
+--  -- Misc
+--  use 'windwp/nvim-autopairs'
+--  use 'windwp/nvim-ts-autotag'
+--  use 'norcalli/nvim-colorizer.lua'
+--  use 'folke/zen-mode.nvim'
+--  use({
+--    "iamcco/markdown-preview.nvim",
+--    run = function() vim.fn["mkdp#util#install"]() end,
+--  })
+--
+--  use 'lewis6991/gitsigns.nvim'
+--  use 'dinhhuy258/git.nvim' -- For git blame & browse
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

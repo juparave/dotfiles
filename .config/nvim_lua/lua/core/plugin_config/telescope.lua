@@ -2,7 +2,7 @@ local builtin = require('telescope.builtin')
 -- ref: https://github.com/alpha2phi/neovim-for-beginner/blob/13-fuzzysearch-02/lua/config/telescope.lua
 local telescope = require('telescope')
 local actions = require('telescope.actions')
-print("telescope setup")
+-- print("telescope setup")
 
 
 telescope.setup {
@@ -42,9 +42,9 @@ telescope.setup {
     }
 
 
-vim.keymap.set('n', '<leader>e', builtin.find_files, {})
+vim.keymap.set('n', '<leader>e', builtin.find_files, { desc = "telescope find files" })
 --vim.keymap.set('n', '<Space><Space>', builtin.oldfiles, {})
-vim.keymap.set('n', '<leader>f', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>t', builtin.help_tags, {})
-vim.keymap.set('n', '<leader>b', builtin.buffers, {})
+vim.keymap.set('n', '<leader>f', builtin.live_grep, { desc = "telescope live grep" })
+vim.keymap.set('n', '<leader>t', builtin.help_tags, { desc = "telescope help tags" })
+vim.keymap.set('n', '<leader>b', builtin.buffers, { desc = "telescope buffers" })
 
