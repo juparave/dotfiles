@@ -105,6 +105,7 @@ return require('packer').startup(function(use)
   use 'williamboman/mason-lspconfig.nvim'
   use 'neovim/nvim-lspconfig' -- Enable LSP
   use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
+  use 'MunifTanjim/prettier.nvim' -- Prettier
 
 --  -- Debugging
 --  use 'mfussenegger/nvim-dap'
