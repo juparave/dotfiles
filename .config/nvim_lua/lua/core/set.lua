@@ -89,4 +89,3 @@ vim.opt.mousemodel = 'popup'
 -- Cursor
 vim.opt.guicursor = '' -- keep block cursor on insert mode
 
-
