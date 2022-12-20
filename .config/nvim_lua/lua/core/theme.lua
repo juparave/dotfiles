@@ -19,3 +19,22 @@ require('nightfox').setup({
 
 ColorMyPencils("nightfox")
 
+function Dayfox()
+    vim.cmd.colorscheme("dayfox")
+    require("lualine").setup {
+        options = {
+            theme = "dayfox",
+        },
+    }
+end
+
+function Nightfox()
+    vim.cmd.colorscheme("nightfox")
+    require("lualine").setup {
+        options = {
+            theme = "nightfox",
+        },
+    }
+end
+
+

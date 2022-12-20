@@ -3,7 +3,7 @@ require('lualine').setup {
     -- icons_enabled = true,
     --theme = 'gruvbox',
     --theme = 'jellybeans',
-    theme = 'nightfox',
+    theme = 'dayfox',
   },
   sections = {
     lualine_a = {
