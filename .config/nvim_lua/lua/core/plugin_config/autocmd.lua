@@ -24,7 +24,7 @@ nvim_create_augroups({
     {"BufWritePre", "*.go", "lua goimports(500)"},
   },
   html_shiftwith = {
-    {"BufNewFile,BufRead", "*.html", "setlocal noexpandtab tabstop=2 shiftwidth=2 softtabstop=2"},
+    {"BufNewFile,BufRead", "*.html", "setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2"},
   },
   go_shiftwith = {
     {"BufNewFile,BufRead", "*.go", "setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4"},
