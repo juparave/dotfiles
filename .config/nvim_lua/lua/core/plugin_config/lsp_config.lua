@@ -3,6 +3,7 @@ require("mason-lspconfig").setup({
   ensure_installed = { "sumneko_lua", "gopls", "pyright" }
 })
 
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local on_attach = function(client, bufnr)
   local opts = {buffer = bufnr, remap = false}
 
@@ -23,22 +24,41 @@ local on_attach = function(client, bufnr)
   vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
 end
 
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-require("lspconfig").sumneko_lua.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
+require("mason-lspconfig").setup_handlers {
+    -- The first entry (without a key) will be the default handler
+    -- and will be called for each installed server that doesn't have
+    -- a dedicated handler.
+    function (server_name) -- default handler (optional)
+        require("lspconfig")[server_name].setup {
+            on_attach = on_attach,
+            capabilities = capabilities,
+        }
+    end,
+    -- Next, you can provide a dedicated handler for specific servers.
+    -- For example, a handler override for the `rust_analyzer`:
+    -- ["rust_analyzer"] = function ()
+    --     require("rust-tools").setup {}
+    -- end,
+    -- ["eslint"] = function ()
+    --     vim.cmd.LspStop('eslint')
+    -- end
 }
 
-require("lspconfig").gopls.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-}
 
-require("lspconfig").pyright.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-}
+-- require("lspconfig").sumneko_lua.setup {
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+-- }
+
+-- require("lspconfig").gopls.setup {
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+-- }
+
+-- require("lspconfig").pyright.setup {
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+-- }
 
 vim.diagnostic.config({
     virtual_text = true,
