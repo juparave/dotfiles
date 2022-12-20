@@ -73,6 +73,9 @@ return require('packer').startup(function(use)
     end,
   }
 
+  -- emmet
+  use "mattn/emmet-vim"
+
   -- which key
   use {
     "folke/which-key.nvim",
