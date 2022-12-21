@@ -12,6 +12,14 @@ require('nightfox').setup({
  --     comments = "italic",
       keywords = "bold",
       types = "bold",
+      comments = "NONE",    -- Value is any valid attr-list value `:help attr-list`
+      conditionals = "NONE",
+      constants = "NONE",
+      functions = "NONE",
+      numbers = "NONE",
+      operators = "NONE",
+      strings = "NONE",
+      variables = "NONE",
     }
   }
 })
