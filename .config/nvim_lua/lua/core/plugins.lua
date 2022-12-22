@@ -17,8 +17,8 @@ return require('packer').startup(function(use)
   use 'nvim-lua/popup.nvim' -- An implementation of the Popup API from vim in Neovim
   use 'nvim-tree/nvim-tree.lua'
   use 'nvim-tree/nvim-web-devicons'
+
   -- like powerline but for neovim
-  --use 'nvim-lualine/lualine.nvim'
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
@@ -41,6 +41,7 @@ return require('packer').startup(function(use)
     -- run = ":TSUpdate",
     run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
   })
+  -- use 'nvim-treesitter/playground'
 
   use {
     'nvim-telescope/telescope.nvim',
@@ -81,6 +82,7 @@ return require('packer').startup(function(use)
   use 'maxmellon/vim-jsx-pretty'
   use 'w0rp/ale'
   use 'burner/vim-svelte'
+  use 'leafOfTree/vim-svelte-plugin'
 
   -- which key
   use {
@@ -115,6 +117,8 @@ return require('packer').startup(function(use)
   use 'neovim/nvim-lspconfig' -- Enable LSP
   use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
   use 'MunifTanjim/prettier.nvim' -- Prettier
+  use 'sveltejs/prettier-plugin-svelte'
+  use 'lukas-reineke/lsp-format.nvim'
 
 --  -- Debugging
 --  use 'mfussenegger/nvim-dap'

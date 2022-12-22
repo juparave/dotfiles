@@ -15,6 +15,7 @@ prettier.setup({
         "typescript",
         "typescriptreact",
         "yaml",
+        "svelte",
     },
     ["null-ls"] = {
         condition = function()
