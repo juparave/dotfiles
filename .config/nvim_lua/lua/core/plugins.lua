@@ -118,8 +118,8 @@ return require('packer').startup(function(use)
 --  use 'nvim-telescope/telescope-dap.nvim'
 --
 --  -- Misc
---  use 'windwp/nvim-autopairs'
---  use 'windwp/nvim-ts-autotag'
+  use 'windwp/nvim-autopairs' -- Autopairs
+  use 'windwp/nvim-ts-autotag' -- Use treesitter to auto close and auto rename html tag
 --  use 'norcalli/nvim-colorizer.lua'
 --  use 'folke/zen-mode.nvim'
 --  use({
