@@ -36,6 +36,16 @@ function Dayfox()
     }
 end
 
+function Dawnfox()
+    vim.cmd.colorscheme("dawnfox")
+    require("lualine").setup {
+        options = {
+            theme = "dawnfox",
+        },
+    }
+end
+
+
 function Nightfox()
     vim.cmd.colorscheme("nightfox")
     require("lualine").setup {
