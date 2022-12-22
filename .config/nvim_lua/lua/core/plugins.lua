@@ -76,6 +76,12 @@ return require('packer').startup(function(use)
   -- emmet
   use "mattn/emmet-vim"
 
+  -- Svelte plugins for linting, highliting and prettifing
+  use 'pangloss/vim-javascript'
+  use 'maxmellon/vim-jsx-pretty'
+  use 'w0rp/ale'
+  use 'burner/vim-svelte'
+
   -- which key
   use {
     "folke/which-key.nvim",

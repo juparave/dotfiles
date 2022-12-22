@@ -26,7 +26,11 @@ nvim_create_augroups({
   html_shiftwith = {
     {"BufNewFile,BufRead", "*.html", "setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2"},
   },
+  svelte_shiftwith = {
+    {"BufNewFile,BufRead", "*.svelte", "setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2"},
+  },
   go_shiftwith = {
+    {"BufNewFile,BufRead", "*.tmpl", "setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2"},
     {"BufNewFile,BufRead", "*.go", "setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4"},
   },
   restore_cursor = {
