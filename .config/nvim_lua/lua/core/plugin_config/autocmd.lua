@@ -30,6 +30,10 @@ nvim_create_augroups({
         { "BufNewFile,BufRead", "*.svelte", "setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2" },
         -- {"BufNewFile,BufRead", "*.svelte", "setlocal equalprg=lua vim.lsp.buf.format()"},
     },
+    typescript_shiftwith = {
+        { "BufNewFile,BufRead", "*.ts", "setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2" },
+        -- {"BufNewFile,BufRead", "*.svelte", "setlocal equalprg=lua vim.lsp.buf.format()"},
+    },
     svelte_save = {
         -- disabled if using lsp-formar.nvim plugin
         -- {"BufWritePre", "*.svelte", "lua vim.lsp.buf.format()"},
