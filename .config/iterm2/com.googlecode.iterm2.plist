@@ -127,6 +127,8 @@
 		<dict>
 			<key>ASCII Anti Aliased</key>
 			<true/>
+			<key>ASCII Ligatures</key>
+			<false/>
 			<key>Ambiguous Double Width</key>
 			<false/>
 			<key>Ansi 0 Color</key>
@@ -335,6 +337,8 @@
 			<string>Default</string>
 			<key>Disable Window Resizing</key>
 			<true/>
+			<key>Draw Powerline Glyphs</key>
+			<false/>
 			<key>Enable Triggers in Interactive Apps</key>
 			<false/>
 			<key>Flashing Bell</key>
@@ -651,11 +655,11 @@
 			<key>Name</key>
 			<string>Default</string>
 			<key>Non Ascii Font</key>
-			<string>Monaco 12</string>
+			<string>InconsolataNerdFontCompleteM-Regular 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>InconsolataNerdFontCompleteM-Regular 18</string>
+			<string>HackNerdFontCompleteM-Regular 17</string>
 			<key>Option Key Sends</key>
 			<integer>0</integer>
 			<key>Prompt Before Closing 2</key>
@@ -698,8 +702,14 @@
 			<array/>
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
+			<key>Thin Strokes</key>
+			<integer>4</integer>
 			<key>Transparency</key>
 			<real>0.0</real>
+			<key>Unicode Normalization</key>
+			<integer>0</integer>
+			<key>Unicode Version</key>
+			<integer>9</integer>
 			<key>Unlimited Scrollback</key>
 			<false/>
 			<key>Use Bold Font</key>
