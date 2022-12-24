@@ -46,4 +46,7 @@ map('n', '<leader>u', ':UndotreeShow<CR>')
 -- Paste without copying replaced text
 map('x', '<leader>p', "\"_dP")
 
+-- replace current word, ref: ThePrimeagen (fantastic!)
+vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+
 -- print(vim.inspect(vim.opt.formatoptions:get()))
