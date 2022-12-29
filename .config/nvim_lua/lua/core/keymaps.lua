@@ -49,4 +49,8 @@ map('x', '<leader>p', "\"_dP")
 -- replace current word, ref: ThePrimeagen (fantastic!)
 vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 
+-- zoom like a pro
+map('n', 'Zz', '<C-w>_ | <C-w>|')
+map('n', 'Zo', '<C-w>=')
+
 -- print(vim.inspect(vim.opt.formatoptions:get()))
