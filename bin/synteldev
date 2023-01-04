@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo 'Connecting to remote tmux session ubbitdev'
+
+ssh -t -l ubbittdev devsyntel.ubbittbi.com tmux attach -t ubbittdev
