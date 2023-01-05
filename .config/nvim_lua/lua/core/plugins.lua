@@ -18,6 +18,9 @@ return require('packer').startup(function(use)
   use 'nvim-tree/nvim-tree.lua'
   use 'nvim-tree/nvim-web-devicons'
 
+  -- wakatime
+  use 'wakatime/vim-wakatime'
+
   -- like powerline but for neovim
   use {
     'nvim-lualine/lualine.nvim',
