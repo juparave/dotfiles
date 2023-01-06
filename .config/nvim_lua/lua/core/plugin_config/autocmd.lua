@@ -20,8 +20,8 @@ nvim_create_augroups({
         -- disabled if using lsp-formar.nvim plugin
         -- { "BufWritePre", "*.go", "lua vim.lsp.buf.format({ async = true, offset_encoding = 'utf-16' })" },
 
-        -- {"BufWritePre", "*.go", "lua go_org_imports"},
-        { "BufWritePre", "*.go", "lua goimports(500)" },
+        { "BufWritePre", "*.go", "lua go_org_imports(500)" },
+        -- { "BufWritePre", "*.go", "lua goimports(500)" },
     },
     html_shiftwith = {
         { "BufNewFile,BufRead", "*.html", "setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2" },
@@ -63,7 +63,8 @@ end
 
 -- ref: https://www.getman.io/posts/programming-go-in-neovim/
 function goimports(timeoutms)
-    local context = { source = { organizeImports = true } }
+    -- local context = { source = { organizeImports = true } }
+    local context = { only = { "source.organizeImports" } }
     vim.validate { context = { context, "t", true } }
 
     local params = vim.lsp.util.make_range_params()
@@ -71,7 +72,7 @@ function goimports(timeoutms)
 
     -- See the implementation of the textDocument/codeAction callback
     -- (lua/vim/lsp/handler.lua) for how to do this properly.
-    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeoutms)
     if not result or next(result) or result[1] == nil then return end
     local actions = result[1].result
     if not actions then return end
