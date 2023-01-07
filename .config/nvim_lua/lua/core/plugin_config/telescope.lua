@@ -20,7 +20,8 @@ telescope.setup {
                 ["<C-n>"] = actions.cycle_history_next,
                 ["<C-p>"] = actions.cycle_history_prev,
             }
-        }
+        },
+        file_ignore_patterns = { "node_modules" }
     },
     pickers = {
         -- Default configuration for builtin pickers goes here:
