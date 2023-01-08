@@ -53,4 +53,7 @@ vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left>
 map('n', 'Zz', '<C-w>_ | <C-w>|')
 map('n', 'Zo', '<C-w>=')
 
+-- close all buffer but this one
+map('n', '<leader>o', ':%bd|e#|bd#<CR>', { desc = 'Close all but' })
+
 -- print(vim.inspect(vim.opt.formatoptions:get()))
