@@ -1,5 +1,5 @@
-require("core.keymaps")
 require("core.set")
+require("core.keymaps")
 require("core.theme")
 require("core.plugins")
 require("core.plugin_config")
