@@ -57,7 +57,7 @@ vim.keymap.set('n', '<leader>e', builtin.find_files, { desc = "telescope find fi
 vim.keymap.set('n', '<leader>f', builtin.live_grep, { desc = "[f] telescope live grep" })
 vim.keymap.set('n', '<leader>t', builtin.help_tags, { desc = "telescope help [t]ags" })
 vim.keymap.set('n', '<leader>b', builtin.buffers, { desc = "telescope [b]uffers" })
-vim.keymap.set('n', '<leader>w', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+vim.keymap.set('n', '<leader>W', builtin.grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>d', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>?', builtin.oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader>/', function()
