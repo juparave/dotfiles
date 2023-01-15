@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo 'Connecting to remote tmux session work on zulu'
+
+ssh -t zulu.prestatus.com tmux attach -t work
