@@ -2,4 +2,14 @@
 
 echo 'Connecting to remote tmux session work on zulu'
 
-ssh -t zulu.prestatus.com tmux attach -t work
+# Redirect stderr to a variable
+error=$(ssh -t zulu.prestatus.com tmux attach -t work 2>&1)
+
+# Check if there was an error
+if [ $? -ne 0 ]; then
+  echo "Error: $error"
+  echo "Please enable the remote tmux session first"
+  echo "on zulu: tmux new -s work -d"
+else
+  echo "Successfully connected to remote tmux session"
+fi
