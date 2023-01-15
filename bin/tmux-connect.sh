@@ -3,7 +3,7 @@
 # ./tmux-connect.sh remote.workstation.com work
 
 # default values
-host=${1:-"remote.workstation.com"}
+host=${1:-"zulu.prestatus.com"}
 session=${2:-"work"}
 
 echo "Connecting to remote tmux session $session on $host"
