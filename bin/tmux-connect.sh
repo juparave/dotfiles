@@ -15,6 +15,10 @@ ssh -t $host tmux attach -t $session 2>&1
 if [ $? -ne 0 ]; then
   echo "Please enable the remote tmux session first"
   echo "eg. tmux new -s work -d"
+  echo "I'll try to create it for you"
+  ssh -t $host "tmux new-session -d -s $session"
+  echo "new session $session created, attaching now..."
+  ssh -t $host tmux attach -t $session 2>&1
 else
   echo "Successfully connected to remote tmux session $session on $host"
 fi
