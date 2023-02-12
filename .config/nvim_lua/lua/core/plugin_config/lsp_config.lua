@@ -1,6 +1,6 @@
 require("mason").setup()
 require("mason-lspconfig").setup({
-    ensure_installed = { "sumneko_lua", "gopls", "pyright" }
+    ensure_installed = { "lua_ls", "gopls", "pyright" }
 })
 
 require("lsp-format").setup {}
