@@ -127,6 +127,8 @@ Plug 'sheerun/vim-polyglot'
 " dart & flutter
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
+Plug 'natebosch/vim-lsc'
+Plug 'natebosch/vim-lsc-dart'
 
 "*****************************************************************************
 "*****************************************************************************

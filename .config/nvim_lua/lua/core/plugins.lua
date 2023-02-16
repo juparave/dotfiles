@@ -84,7 +84,7 @@ return require('packer').startup(function(use)
     -- Svelte plugins for linting, highliting and prettifing
     use 'pangloss/vim-javascript'
     use 'maxmellon/vim-jsx-pretty'
-    -- use 'w0rp/ale'
+    use 'w0rp/ale'
     use 'burner/vim-svelte'
     use 'leafOfTree/vim-svelte-plugin'
 
@@ -123,6 +123,13 @@ return require('packer').startup(function(use)
     use 'MunifTanjim/prettier.nvim' -- Prettier
     use 'sveltejs/prettier-plugin-svelte'
     use 'lukas-reineke/lsp-format.nvim'
+
+    -- Flutter and Dart LSP
+    -- use 'dart-lang/dart-vim-plugin'
+    -- use 'thosakwe/vim-flutter'
+    -- use 'natebosch/vim-lsc'
+    -- use 'natebosch/vim-lsc-dart'
+    use { 'akinsho/flutter-tools.nvim', requires = 'nvim-lua/plenary.nvim' }
 
     --  -- Debugging
     --  use 'mfussenegger/nvim-dap'
