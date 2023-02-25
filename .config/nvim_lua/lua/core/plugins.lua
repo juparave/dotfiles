@@ -108,6 +108,15 @@ return require('packer').startup(function(use)
     use "saadparwaiz1/cmp_luasnip" -- snippet completions
     use "hrsh7th/cmp-nvim-lsp" -- lsp completion
     use "hrsh7th/cmp-nvim-lua"
+    use {
+        "zbirenbaum/copilot-cmp",
+        after = { "copilot.lua" },
+        config = function()
+            require("copilot_cmp").setup {
+                method = "getCompletionsCycling",
+            }
+        end
+    }
 
     -- Snippets
     use "L3MON4D3/LuaSnip" --snippet engine
@@ -123,6 +132,9 @@ return require('packer').startup(function(use)
     use 'MunifTanjim/prettier.nvim' -- Prettier
     use 'sveltejs/prettier-plugin-svelte'
     use 'lukas-reineke/lsp-format.nvim'
+
+    -- LSP symbols
+    use { 'stevearc/aerial.nvim', config = function() require('aerial').setup() end }
 
     -- Flutter and Dart LSP
     -- use 'dart-lang/dart-vim-plugin'
@@ -167,7 +179,9 @@ return require('packer').startup(function(use)
     })
 
     -- Copilot
-    use 'github/copilot.vim'
+    -- use 'github/copilot.vim'
+    -- pure lua replacement for github/copilot.vim
+    use { "zbirenbaum/copilot.lua" }
 
     -- Automatically set up your configuration after cloning packer.nvim
     -- Put this at the end after all plugins
