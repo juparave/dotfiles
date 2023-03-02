@@ -55,6 +55,7 @@ Plug 'dense-analysis/ale'
 Plug 'editor-bootstrap/vim-bootstrap-updater'
 Plug 'tpope/vim-rhubarb' " required by fugitive to :Gbrowse
 " themes
+Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 Plug 'tomasr/molokai'
 Plug 'gruvbox-community/gruvbox'
 Plug 'danilo-augusto/vim-afterglow'
@@ -352,9 +353,27 @@ if !exists('*s:setupWrapping')
   endfunction
 endif
 
+if !exists('FlutterProject')
+    " dart/flutter
+    function! FlutterProject()
+        if !filereadable("pubspec.yaml")
+            return 0
+        endif
+        let $FZF_DEFAULT_COMMAND = "rg --files --hidden --follow -g '!.git/*' -g '!android' -g '!window' -g '!macos' -g '!windows' -g '!ios' -g '!linux'"
+        return 1
+    endfunction
+endif
+
 "*****************************************************************************
 "" Autocmd Rules
 "*****************************************************************************
+
+"" Entering
+augroup vimrc-sync-fromstart
+  autocmd!
+  autocmd BufEnter * call FlutterProject()
+augroup END
+
 "" The PC is fast enough, do syntax highlight syncing from start unless 200 lines
 augroup vimrc-sync-fromstart
   autocmd!
@@ -583,6 +602,7 @@ augroup go
   au FileType go nmap <leader>rb :<C-u>call <SID>build_go_files()<CR>
 
 augroup END
+
 
 " ale
 :call extend(g:ale_linters, {
