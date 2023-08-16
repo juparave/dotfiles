@@ -4,6 +4,12 @@ local telescope = require('telescope')
 local actions = require('telescope.actions')
 -- print("telescope setup")
 
+-- os dependencies for telescope
+-- fzf
+-- ripgrep
+-- fd-find
+-- silversearcher-ag
+
 
 telescope.setup {
     defaults = {
