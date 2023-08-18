@@ -3,3 +3,6 @@
 .config/nvim/plugged
 .config/nvim/autoload/plug.vim
 .config/nvim_lua/plugin
+.vim/autoload
+.vim/plugged
+.vim/undodir
