@@ -8,15 +8,15 @@ REMOTE_USER="$1"
 REMOTE_HOST="$2"
 REMOTE_DB_USER="$3"
 REMOTE_DB_PASS="$4"
-LOCAL_DB_USER="$5"
-LOCAL_DB_PASS="$6"
-DATABASE_NAME="$7"
+DATABASE_NAME="$5"
+LOCAL_DB_USER="$6"
+LOCAL_DB_PASS="$7"
 
 # Remove existing local backup if it exists
 rm -f chofero.sql.bz2
 
 # Dump the remote database and compress it
-ssh "$REMOTE_USER@$REMOTE_HOST" "mysqldump -u $REMOTE_DB_USER -p$REMOTE_DB_PASS --opt $DATABASE_NAME" | bzip2 > $DATABASE_NAME.sql.bz2
+ssh "$REMOTE_USER@$REMOTE_HOST" "mysqldump -u $REMOTE_DB_USER -p$REMOTE_DB_PASS --opt $DATABASE_NAME" | bzip2 > ${DATABASE_NAME}.sql.bz2
 
 echo "Remote database copied and compressed."
 
