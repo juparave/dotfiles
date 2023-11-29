@@ -49,7 +49,7 @@ return require('packer').startup(function(use)
 
     use {
         'nvim-telescope/telescope.nvim',
-        tag = '0.1.0',
+        tag = '0.1.4',
         requires = { { 'nvim-lua/plenary.nvim' } },
     }
     use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
@@ -102,12 +102,12 @@ return require('packer').startup(function(use)
     }
 
     -- Cmp plugins
-    use "hrsh7th/nvim-cmp" -- The completion plugin
-    use "hrsh7th/cmp-buffer" -- buffer completions
-    use "hrsh7th/cmp-path" -- path completions
-    use "hrsh7th/cmp-cmdline" -- cmdline completions
+    use "hrsh7th/nvim-cmp"         -- The completion plugin
+    use "hrsh7th/cmp-buffer"       -- buffer completions
+    use "hrsh7th/cmp-path"         -- path completions
+    use "hrsh7th/cmp-cmdline"      -- cmdline completions
     use "saadparwaiz1/cmp_luasnip" -- snippet completions
-    use "hrsh7th/cmp-nvim-lsp" -- lsp completion
+    use "hrsh7th/cmp-nvim-lsp"     -- lsp completion
     use "hrsh7th/cmp-nvim-lua"
     use {
         "zbirenbaum/copilot-cmp",
@@ -120,7 +120,7 @@ return require('packer').startup(function(use)
     }
 
     -- Snippets
-    use "L3MON4D3/LuaSnip" --snippet engine
+    use "L3MON4D3/LuaSnip"             --snippet engine
     use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
 
     use "tpope/vim-commentary"
@@ -128,9 +128,9 @@ return require('packer').startup(function(use)
     -- LSP
     use 'williamboman/mason.nvim'
     use 'williamboman/mason-lspconfig.nvim'
-    use 'neovim/nvim-lspconfig' -- Enable LSP
+    use 'neovim/nvim-lspconfig'           -- Enable LSP
     use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
-    use 'MunifTanjim/prettier.nvim' -- Prettier
+    use 'MunifTanjim/prettier.nvim'       -- Prettier
     use 'sveltejs/prettier-plugin-svelte'
     use 'lukas-reineke/lsp-format.nvim'
 
@@ -152,7 +152,7 @@ return require('packer').startup(function(use)
     --  use 'nvim-telescope/telescope-dap.nvim'
     --
     --  -- Misc
-    use 'windwp/nvim-autopairs' -- Autopairs
+    use 'windwp/nvim-autopairs'  -- Autopairs
     use 'windwp/nvim-ts-autotag' -- Use treesitter to auto close and auto rename html tag
     --  use 'norcalli/nvim-colorizer.lua'
     --  use 'folke/zen-mode.nvim'
