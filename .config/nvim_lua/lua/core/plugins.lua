@@ -128,9 +128,9 @@ return require('packer').startup(function(use)
     -- LSP
     use 'williamboman/mason.nvim'
     use 'williamboman/mason-lspconfig.nvim'
-    use 'neovim/nvim-lspconfig'           -- Enable LSP
-    use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
-    use 'MunifTanjim/prettier.nvim'       -- Prettier
+    use 'neovim/nvim-lspconfig'     -- Enable LSP
+    use 'nvimtools/none-ls.nvim'    -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
+    use 'MunifTanjim/prettier.nvim' -- Prettier
     use 'sveltejs/prettier-plugin-svelte'
     use 'lukas-reineke/lsp-format.nvim'
 
