@@ -3,13 +3,14 @@
 # ./tmux-connect.sh remote.workstation.com work
 
 # default values
-host=${1:-"zulu.prestatus.com"}
-session=${2:-"work"}
+user=${1:-$USER}
+host=${2:-"zulu.prestatus.com"}
+session=${3:-"work"}
 
-echo "Connecting to remote tmux session $session on $host"
+echo "Connecting $user to remote tmux session $session on $host"
 
 # Redirect stderr to a variable
-ssh -t $host tmux attach -t $session 2>&1 
+ssh -l $user -t $host tmux attach -t $session 2>&1 
 
 # Check if there was an error
 if [ $? -ne 0 ]; then
