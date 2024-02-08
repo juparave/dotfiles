@@ -13,15 +13,15 @@ require('nvim-tree').setup({
             },
         },
     },
-    -- disable window_picker for
-    -- explorer to work well with
-    -- window splits
-    actions = {
-        open_file = {
-            window_picker = {
-                enable = false,
-            },
-        },
+  },
+  -- disable window_picker for
+  -- explorer to work well with
+  -- window splits
+  actions = {
+    open_file = {
+      window_picker = {
+        enable = true,
+      },
     },
     -- 	git = {
     -- 		ignore = false,
