@@ -66,6 +66,21 @@ require("mason-lspconfig").setup_handlers {
 --   capabilities = capabilities,
 -- }
 
+local util = require 'lspconfig.util'
+require 'lspconfig'.eslint.setup {
+    -- Copied from nvim-lspconfig/lua/lspconfig/server_conigurations/eslint.js
+    root_dir = util.root_pattern(
+        '.eslintrc',
+        '.eslintrc.js',
+        '.eslintrc.cjs',
+        '.eslintrc.yaml',
+        '.eslintrc.yml',
+        '.eslintrc.json'
+    -- Disabled to prevent "No ESLint configuration found" exceptions
+    -- 'package.json',
+    ),
+}
+
 vim.diagnostic.config({
     virtual_text = true,
 })
