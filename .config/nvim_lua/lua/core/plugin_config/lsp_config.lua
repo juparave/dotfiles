@@ -5,6 +5,11 @@ require("mason-lspconfig").setup({
 
 require("lsp-format").setup {}
 
+-- lemminx, substitute for xmlformat
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lemminx
+-- require'lspconfig'.lemminx.setup{}
+
+
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local on_attach = function(client, bufnr)
     -- attach lsp-format
