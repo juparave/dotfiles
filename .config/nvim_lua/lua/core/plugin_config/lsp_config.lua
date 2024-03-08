@@ -73,6 +73,9 @@ require("mason-lspconfig").setup_handlers {
 
 local util = require 'lspconfig.util'
 require 'lspconfig'.eslint.setup {
+    -- `vscode-eslint-language-server` is a linting engine for JavaScript / Typescript.
+    -- It can be installed via `npm`:
+    -- npm i -g vscode-langservers-extracted
     -- Copied from nvim-lspconfig/lua/lspconfig/server_conigurations/eslint.js
     root_dir = util.root_pattern(
         '.eslintrc',
