@@ -12,7 +12,9 @@ if [ ! -f $noteFilename ]; then
     echo "# Notes for $(date +%Y-%m-%d)" > $noteFilename
 fi
 
-/usr/local/bin/vim -c "norm Go" \
+vimPath=`which vim`
+
+$vimPath -c "norm Go" \
     -c "norm Go## $(date +%H:%M)" \
     -c "norm G2o" \
     -c "norm zz" \
