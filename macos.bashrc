@@ -105,3 +105,5 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # Load Angular CLI autocompletion.
 #source <(ng completion script)
+
+. "$HOME/.local/bin/env"
