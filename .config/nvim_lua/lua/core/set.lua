@@ -5,15 +5,15 @@ vim.opt.backspace = '2'
 vim.opt.showcmd = true
 vim.opt.laststatus = 2
 -- autowrite write the contents of the file, I prefer hidden
---vim.opt.autowrite = true 
+--vim.opt.autowrite = true
 vim.opt.hidden = true
 vim.opt.cursorline = true
 vim.opt.autoread = true -- keep block cursor on insert mode
 
 -- use spaces for tabs and whatnot
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
 vim.opt.shiftround = true
 vim.opt.expandtab = true
 vim.opt.smarttab = true
@@ -40,16 +40,16 @@ vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 no_buffers_menu = 1
 
 -- Encoding
-vim.opt.encoding= 'utf-8'
-vim.opt.fileencoding= 'utf-8'
-vim.opt.fileencodings= 'utf-8'
+vim.opt.encoding = 'utf-8'
+vim.opt.fileencoding = 'utf-8'
+vim.opt.fileencodings = 'utf-8'
 
 -- Searching
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.ignorecase = false
 vim.opt.smartcase = false
-vim.opt.hlsearch = false          -- remove highlight after search
+vim.opt.hlsearch = false -- remove highlight after search
 
 -- Better search
 vim.opt.path:remove "/usr/include"
@@ -78,7 +78,7 @@ vim.opt.cursorline = true
 vim.opt.termguicolors = true
 vim.opt.scrolloff = 7
 -- Font
-vim.opt.guifont="Inconsolata:16"
+vim.opt.guifont = "Inconsolata:16"
 --vim.g.webdevicons_enable = 0
 --vim.g.webdevicons_enable_nerdtree = 1
 
@@ -88,4 +88,3 @@ vim.opt.mousemodel = 'popup'
 
 -- Cursor
 vim.opt.guicursor = '' -- keep block cursor on insert mode
-
