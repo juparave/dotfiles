@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
+# Free models
+# openrouter/qwen/qwen3-235b-a22b:free
+
 aider \
     --architect \
-    --model openrouter/google/gemini-2.5-pro-exp-03-25:free \
+    --model openrouter/deepseek/deepseek-chat-v3-0324 \
     --editor-model openrouter/google/gemini-2.0-flash-exp:free \
     --dark-mode \
     "$@"
