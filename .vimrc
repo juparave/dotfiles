@@ -96,7 +96,9 @@ Plug 'wakatime/vim-wakatime'
 
 " go
 "" Go Lang Bundle
-Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
+if !has('nvim')
+  Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
+endif
 
 
 " html
@@ -540,7 +542,8 @@ nnoremap <Bslash>R :<C-U>source $MYVIMRC<CR>
 "*****************************************************************************
 
 " go
-" vim-go
+" vim-go (only load for regular Vim, not Neovim)
+if !has('nvim')
 " run :GoBuild or :GoTestCompile based on the go file
 function! s:build_go_files()
   let l:file = expand('%')
@@ -603,6 +606,7 @@ augroup go
 
 augroup END
 
+endif " End vim-go configuration for regular Vim
 
 " ale
 :call extend(g:ale_linters, {
