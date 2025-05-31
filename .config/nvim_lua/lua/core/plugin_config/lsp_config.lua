@@ -1,15 +1,10 @@
-require("mason").setup()
-require("mason-lspconfig").setup({
-    ensure_installed = { "lua_ls", "gopls", "pyright" }
-})
-
 require("lsp-format").setup {}
 
 -- lemminx, substitute for xmlformat
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lemminx
 -- require'lspconfig'.lemminx.setup{}
 
-
+-- Define capabilities and on_attach BEFORE using them
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local on_attach = function(client, bufnr)
     -- attach lsp-format
@@ -35,35 +30,39 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
 end
 
+-- Set up mason for package management only (no automatic LSP setup)
+require("mason").setup()
+
+-- Disable mason-lspconfig completely by not requiring it
+-- require("mason-lspconfig") -- Commented out to prevent any automatic setup
+
+-- Manual setup for each server to ensure only one instance
 local lspconfig = require("lspconfig")
+
 lspconfig.lua_ls.setup {
     on_attach = on_attach,
     capabilities = capabilities,
 }
+
 lspconfig.gopls.setup {
     on_attach = on_attach,
     capabilities = capabilities,
+    cmd = { "gopls" },  -- Use simple command, let mason handle the path
+    settings = {
+        gopls = {
+            analyses = {
+                unusedparams = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
+        },
+    },
 }
+
 lspconfig.pyright.setup {
     on_attach = on_attach,
     capabilities = capabilities,
 }
-
-
--- require("lspconfig").sumneko_lua.setup {
---   on_attach = on_attach,
---   capabilities = capabilities,
--- }
-
--- require("lspconfig").gopls.setup {
---   on_attach = on_attach,
---   capabilities = capabilities,
--- }
-
--- require("lspconfig").pyright.setup {
---   on_attach = on_attach,
---   capabilities = capabilities,
--- }
 
 local util = require 'lspconfig.util'
 require 'lspconfig'.eslint.setup {
