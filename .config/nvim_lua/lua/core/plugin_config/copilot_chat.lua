@@ -73,7 +73,9 @@ local opts = { noremap = true, silent = true }
 
 -- Basic chat commands
 vim.keymap.set("n", "<leader>cc", "<cmd>CopilotChat<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Open chat" }))
-vim.keymap.set("x", "<leader>cc", "<cmd>CopilotChatVisual<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Open visual chat" }))
+vim.keymap.set("x", "<leader>cc", function()
+  require("CopilotChat").ask("", { selection = require("CopilotChat.select").visual })
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Chat with selection" }))
 
 -- Quick chat
 vim.keymap.set("n", "<leader>cq", function()
@@ -83,16 +85,52 @@ vim.keymap.set("n", "<leader>cq", function()
   end
 end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Quick chat" }))
 
--- Specific prompts (using command form for safety)
-vim.keymap.set("n", "<leader>ce", "<cmd>CopilotChatExplain<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Explain code" }))
-vim.keymap.set("n", "<leader>ct", "<cmd>CopilotChatTests<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Generate tests" }))
-vim.keymap.set("n", "<leader>cr", "<cmd>CopilotChatReview<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Review code" }))
-vim.keymap.set("n", "<leader>cf", "<cmd>CopilotChatFix<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Fix code" }))
-vim.keymap.set("n", "<leader>co", "<cmd>CopilotChatOptimize<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Optimize code" }))
-vim.keymap.set("n", "<leader>cd", "<cmd>CopilotChatDocs<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Add documentation" }))
+-- Specific prompts (using safer approach)
+vim.keymap.set("n", "<leader>ce", function()
+  require("CopilotChat").ask("Explain this code", { selection = require("CopilotChat.select").buffer })
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Explain code" }))
+
+vim.keymap.set("n", "<leader>ct", function()
+  require("CopilotChat").ask("Generate tests for this code", { selection = require("CopilotChat.select").buffer })
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Generate tests" }))
+
+vim.keymap.set("n", "<leader>cr", function()
+  require("CopilotChat").ask("Review this code", { selection = require("CopilotChat.select").buffer })
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Review code" }))
+
+vim.keymap.set("n", "<leader>cf", function()
+  require("CopilotChat").ask("Fix any issues in this code", { selection = require("CopilotChat.select").buffer })
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Fix code" }))
+
+vim.keymap.set("n", "<leader>co", function()
+  require("CopilotChat").ask("Optimize this code for performance and readability", { selection = require("CopilotChat.select").buffer })
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Optimize code" }))
+
+vim.keymap.set("n", "<leader>cd", function()
+  require("CopilotChat").ask("Add documentation comments to this code", { selection = require("CopilotChat.select").buffer })
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Add documentation" }))
 
 -- Git integration
-vim.keymap.set("n", "<leader>cm", "<cmd>CopilotChatCommit<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Generate commit message" }))
+vim.keymap.set("n", "<leader>cm", function()
+  require("CopilotChat").ask("Write a commit message for the staged changes using commitizen convention", { context = "git:staged" })
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Generate commit message" }))
+
+-- Visual mode versions of prompts
+vim.keymap.set("x", "<leader>ce", function()
+  require("CopilotChat").ask("Explain this code", { selection = require("CopilotChat.select").visual })
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Explain selection" }))
+
+vim.keymap.set("x", "<leader>ct", function()
+  require("CopilotChat").ask("Generate tests for this code", { selection = require("CopilotChat.select").visual })
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Generate tests for selection" }))
+
+vim.keymap.set("x", "<leader>cr", function()
+  require("CopilotChat").ask("Review this code", { selection = require("CopilotChat.select").visual })
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Review selection" }))
+
+vim.keymap.set("x", "<leader>cf", function()
+  require("CopilotChat").ask("Fix any issues in this code", { selection = require("CopilotChat.select").visual })
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Fix selection" }))
 
 -- Advanced features (with error handling)
 vim.keymap.set("n", "<leader>cp", function()
