@@ -8,8 +8,8 @@ map('i', '(<CR>', '(<CR>)<Esc>ko')
 map('i', '[<CR>', '[<CR>]<Esc>ko')
 
 -- Special Yanks
-map('n', 'Y', 'y$') -- Copy from cursor to end of line
-map('n', 'x', '"_x') -- Do not yank with x
+map('n', 'Y', 'y$')                      -- Copy from cursor to end of line
+map('n', 'x', '"_x')                     -- Do not yank with x
 
 map('n', '<leader>h', ':nohlsearch<CR>') -- clear highlights on search results
 
@@ -24,10 +24,10 @@ map('n', '<leader>z', ':bp<CR>') -- navigate previous buffer
 map('n', '<leader>q', ':bp<CR>') -- navigate previous buffer
 map('n', '<leader>x', ':bn<CR>') -- navigate next buffer
 map('n', '<leader>w', ':bn<CR>') -- navigate next buffer
-map('n', '<leader>c', ':bd<CR>') -- close buffer
+-- map('n', '<leader>c', ':bd<CR>') -- close buffer
 
 -- Split
-map('n', '<leader>h', ':<C-u>split<CR>') -- horizontal split
+map('n', '<leader>h', ':<C-u>split<CR>')  -- horizontal split
 map('n', '<leader>v', ':<C-u>vsplit<CR>') -- vertical split
 
 -- Move visual block

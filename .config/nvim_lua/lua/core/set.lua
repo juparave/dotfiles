@@ -67,6 +67,10 @@ vim.cmd [[
   set foldexpr=nvim_treesitter#foldexpr()
 ]]
 
+-- Split Settings
+vim.opt.splitright = true   -- Always split to the right
+vim.opt.splitbelow = false  -- Always split above
+
 --
 -- Visual Settings
 --
