@@ -6,3 +6,5 @@
 .vim/autoload
 .vim/plugged
 .vim/undodir
+.aider*
+.opencode*
