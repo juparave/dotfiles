@@ -40,10 +40,13 @@ nvim_create_augroups({
     },
     go_shiftwith = {
         { "BufNewFile,BufRead", "*.tmpl", "setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2" },
-        { "BufNewFile,BufRead", "*.go", "setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4" },
+        { "BufNewFile,BufRead", "*.go",   "setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4" },
     },
     restore_cursor = {
-        { 'BufRead', '*', [[call setpos(".", getpos("'\""))]] };
+        { 'BufRead', '*', [[call setpos(".", getpos("'\""))]] },
+    },
+    lua_shiftwith = {
+        { "BufNewFile,BufRead", "*.lua", "setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4" },
     },
 })
 
