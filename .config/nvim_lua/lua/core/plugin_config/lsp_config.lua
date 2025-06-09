@@ -35,19 +35,26 @@ require("mason").setup()
 
 -- Disable mason-lspconfig completely by not requiring it
 -- require("mason-lspconfig") -- Commented out to prevent any automatic setup
+require("mason-lspconfig").setup {
+    ensure_installed = { "lua_ls", "gopls", "pyright", "eslint" }, -- Specify the servers you want to ensure are installed
+    automatic_installation = false,                                -- Disable automatic installation
+    automatic_enable = {
+        exclude = { "gopls", "angularls" },                        -- Exclude servers from automatic enabling
+    }
+}
 
 -- Manual setup for each server to ensure only one instance
 local lspconfig = require("lspconfig")
 
-lspconfig.lua_ls.setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-}
+-- lspconfig.lua_ls.setup {
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+-- }
 
 lspconfig.gopls.setup {
     on_attach = on_attach,
     capabilities = capabilities,
-    cmd = { "gopls" },  -- Use simple command, let mason handle the path
+    cmd = { "gopls" }, -- Use simple command, let mason handle the path
     settings = {
         gopls = {
             analyses = {
@@ -59,10 +66,18 @@ lspconfig.gopls.setup {
     },
 }
 
-lspconfig.pyright.setup {
+lspconfig.angularls.setup {
     on_attach = on_attach,
     capabilities = capabilities,
+    cmd = { "angularls" }, -- Use simple command, let mason handle the path
+    filetypes = { "html", "typescript" },
+    root_dir = lspconfig.util.root_pattern("angular.json", "package.json"),
 }
+
+-- lspconfig.pyright.setup {
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+-- }
 
 local util = require 'lspconfig.util'
 require 'lspconfig'.eslint.setup {

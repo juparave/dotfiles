@@ -56,7 +56,7 @@ return require('packer').startup(function(use)
     use 'nvim-telescope/telescope-file-browser.nvim'
 
     use 'tpope/vim-fugitive'
-    use 'airblade/vim-gitgutter'
+    -- use 'airblade/vim-gitgutter'
 
     -- Better surround
     use { "tpope/vim-surround", event = "BufReadPre" }
@@ -191,7 +191,7 @@ return require('packer').startup(function(use)
             { "zbirenbaum/copilot.lua" },
             { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
         },
-        build = "make tiktoken",                      -- Only on MacOS or Linux
+        build = "make tiktoken",                            -- Only on MacOS or Linux
         opts = {
             -- See Configuration section for options
         },
