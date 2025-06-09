@@ -10,7 +10,7 @@ copilot_chat.setup({
   log_level = "info",
   
   -- Model selection
-  model = "gpt-4o",
+  model = "gpt-4.1",
   
   -- Default context settings
   context = "buffers",
@@ -73,9 +73,7 @@ local opts = { noremap = true, silent = true }
 
 -- Basic chat commands
 vim.keymap.set("n", "<leader>cc", "<cmd>CopilotChat<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Open chat" }))
-vim.keymap.set("x", "<leader>cc", function()
-  require("CopilotChat").ask("", { selection = require("CopilotChat.select").visual })
-end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Chat with selection" }))
+vim.keymap.set("x", "<leader>cc", "<cmd>CopilotChat<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Chat with selection" }))
 
 -- Quick chat
 vim.keymap.set("n", "<leader>cq", function()
