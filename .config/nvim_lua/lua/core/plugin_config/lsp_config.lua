@@ -1,23 +1,39 @@
 require("lsp-format").setup {}
 
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+    require("lsp-format").on_attach(client, args.buf)
+  end,
+})
+
 -- lemminx, substitute for xmlformat
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lemminx
 -- require'lspconfig'.lemminx.setup{}
 
+-- LSP Format on Save
+local format_on_save = function(bufnr)
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    buffer = bufnr,
+    callback = function()
+      vim.lsp.buf.format({ async = false })
+    end,
+  })
+end
+
 -- Define capabilities and on_attach BEFORE using them
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local on_attach = function(client, bufnr)
-    -- attach lsp-format
-    require("lsp-format").on_attach(client)
-
-    local opts = { buffer = bufnr, remap = false }
 
     if client.name == "eslint" then
         vim.cmd.LspStop('eslint')
         return
     end
 
+    -- Attach formatting on save
+    -- format_on_save(bufnr)
 
+    local opts = { buffer = bufnr, remap = false }
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
     vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
     vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, opts)
@@ -33,10 +49,8 @@ end
 -- Set up mason for package management only (no automatic LSP setup)
 require("mason").setup()
 
--- Disable mason-lspconfig completely by not requiring it
--- require("mason-lspconfig") -- Commented out to prevent any automatic setup
 require("mason-lspconfig").setup {
-    ensure_installed = { "lua_ls", "gopls", "pyright", "eslint" }, -- Specify the servers you want to ensure are installed
+    ensure_installed = { "lua_ls", "gopls", "pyright", "angularls", "ts_ls", "eslint" }, -- Specify the servers you want to ensure are installed
     automatic_installation = false,                                -- Disable automatic installation
     automatic_enable = {
         exclude = { "gopls", "angularls" },                        -- Exclude servers from automatic enabling
@@ -70,7 +84,7 @@ lspconfig.angularls.setup {
     on_attach = on_attach,
     capabilities = capabilities,
     cmd = { "angularls" }, -- Use simple command, let mason handle the path
-    filetypes = { "html", "typescript" },
+    filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx" },
     root_dir = lspconfig.util.root_pattern("angular.json", "package.json"),
 }
 
