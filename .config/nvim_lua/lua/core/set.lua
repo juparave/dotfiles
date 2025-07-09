@@ -81,6 +81,7 @@ vim.opt.signcolumn = 'yes'
 vim.opt.cursorline = true
 vim.opt.termguicolors = true
 vim.opt.scrolloff = 7
+vim.opt.sidescrolloff = 5
 -- Font
 vim.opt.guifont = "Inconsolata:16"
 --vim.g.webdevicons_enable = 0
