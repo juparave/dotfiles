@@ -108,4 +108,3 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 . "$HOME/.local/bin/env"
 
-alias claude="/Users/pablito/.claude/local/claude"
