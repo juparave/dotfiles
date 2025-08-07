@@ -1,0 +1,64 @@
+{
+  "$schema": "https://charm.land/crush.json",
+  "lsp": {
+    "go": {
+      "command": "gopls"
+    },
+    "typescript": {
+      "command": "/Users/pablito/.local/share/nvim/mason/packages/typescript-language-server/node_modules/.bin/typescript-language-server",
+      "args": ["--stdio"]
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "serena": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server"
+      ]
+    }
+  },
+  "providers": {
+    "ollama": {
+      "name": "Ollama",
+      "base_url": "http://localhost:11434/v1/",
+      "type": "openai",
+      "api_key": "dummy",
+      "models": [
+        {
+          "name": "OpenAI GPT OSS",
+          "id": "gpt-oss:latest",
+          "context_window": 128000,
+          "default_max_tokens": 20000,
+          "can_reason": true
+        },
+        {
+          "name": "Deepseek r1:8b",
+          "id": "deepseek-r1:8b",
+          "context_window": 128000,
+          "default_max_tokens": 20000
+        },
+        {
+          "name": "Mistral 7B-Instruct",
+          "id": "mistral:7b-instruct",
+          "context_window": 32000,
+          "default_max_tokens": 5000
+        },
+        {
+          "name": "Qwen 3 30B",
+          "id": "qwen3:30b",
+          "context_window": 256000,
+          "default_max_tokens": 20000
+        }
+      ]
+    }
+  }
+}
