@@ -69,9 +69,9 @@ workon() {
 evoworkon() {
     WS=~/EVOworkspace
     if [[ -n $1 ]]; then
-        selected=$(find $WS/python $WS/go $WS/flutter $WS/angular $WS/svelte -mindepth 1 -maxdepth 1 -type d | fzf --query $1)
+        selected=$(find $WS/python $WS/go $WS/flutter $WS/angular $WS/svelte $WS/php -mindepth 1 -maxdepth 1 -type d | fzf --query $1)
     else
-        selected=$(find $WS/python $WS/go $WS/flutter $WS/angular $WS/svelte -mindepth 1 -maxdepth 1 -type d | fzf)
+        selected=$(find $WS/python $WS/go $WS/flutter $WS/angular $WS/svelte $WS/php -mindepth 1 -maxdepth 1 -type d | fzf)
     fi
 
     if [[ -z $selected ]]; then
