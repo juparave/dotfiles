@@ -42,25 +42,30 @@ list_containers() {
     echo "Containers on $server:"
     echo "=============================="
     
-    # Set the appropriate Docker command based on mode
+    # Try to connect and list containers based on mode
     case $MODE in
         "all")
-            CMD="DOCKER_HOST=ssh://pablito@$server docker ps -a"
+            if DOCKER_HOST=ssh://pablito@$server docker ps -a >/dev/null 2>&1; then
+                DOCKER_HOST=ssh://pablito@$server docker ps -a
+            else
+                echo "Error: Could not connect to $server or Docker is not running"
+            fi
             ;;
         "details")
-            CMD="DOCKER_HOST=ssh://pablito@$server docker ps -a --format \"table {{.Names}}\t{{.Status}}\t{{.RunningFor}}\""
+            if DOCKER_HOST=ssh://pablito@$server docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.RunningFor}}' >/dev/null 2>&1; then
+                DOCKER_HOST=ssh://pablito@$server docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.RunningFor}}'
+            else
+                echo "Error: Could not connect to $server or Docker is not running"
+            fi
             ;;
         "status")
-            CMD="DOCKER_HOST=ssh://pablito@$server docker ps -a --format \"table {{.Names}}\t{{.Status}}\""
+            if DOCKER_HOST=ssh://pablito@$server docker ps -a --format 'table {{.Names}}\t{{.Status}}' >/dev/null 2>&1; then
+                DOCKER_HOST=ssh://pablito@$server docker ps -a --format 'table {{.Names}}\t{{.Status}}'
+            else
+                echo "Error: Could not connect to $server or Docker is not running"
+            fi
             ;;
     esac
-    
-    # Try to connect and list containers
-    if $CMD >/dev/null 2>&1; then
-        $CMD
-    else
-        echo "Error: Could not connect to $server or Docker is not running"
-    fi
     echo ""
 }
 
