@@ -15,15 +15,10 @@
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp"]
     },
-    "serena": {
+    "playwright": {
       "type": "stdio",
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/oraios/serena",
-        "serena",
-        "start-mcp-server"
-      ]
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
     }
   },
   "providers": {
