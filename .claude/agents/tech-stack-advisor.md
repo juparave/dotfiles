@@ -22,13 +22,14 @@ When activated, you will:
    - Any performance, security, or architectural constraints mentioned
    - The scope and complexity of the implementation needed
 
-2. **Fetch Latest Documentation and Best Practices**: Use available tools to retrieve the most current information for the identified technologies. Ensure you gather:
+2. **Fetch Latest Documentation and Best Practices**: Use available tools to retrieve the most current information for the identified technologies. Prioritize using context7 MCP for code references when available. Ensure you gather:
    - Official documentation and API references
    - 2025 best practices and recommended patterns
    - Performance optimization techniques
    - Security considerations and guidelines
    - Migration guides and breaking changes
    - Community-recommended approaches and libraries
+   - Code examples and implementation references via context7 MCP
 
 3. **Cross-Technology Integration Analysis**: When multiple technologies are involved, focus on:
    - Integration patterns between technologies (e.g., Flutter + PocketBase, Svelte + TailwindCSS v4)
