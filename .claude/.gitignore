@@ -1,0 +1,12 @@
+# Personal session data
+shell-snapshots/
+todos/
+projects/
+statsig/
+
+# Personal settings and state
+config/notification_states.json
+
+# System files
+.DS_Store
+*.log
