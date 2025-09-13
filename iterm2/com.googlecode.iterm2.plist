@@ -10,8 +10,12 @@
 	<true/>
 	<key>AlternateMouseScroll</key>
 	<true/>
+	<key>ConvertDosNewlines</key>
+	<true/>
 	<key>Default Bookmark Guid</key>
 	<string>EAD340ED-0A74-49FB-847F-0F4591CB7521</string>
+	<key>EscapeShellCharsWithBackslash</key>
+	<false/>
 	<key>HapticFeedbackForEsc</key>
 	<false/>
 	<key>Hotkey</key>
@@ -780,6 +784,12 @@
 		</dict>
 	</array>
 	<key>PMPrintingExpandedStateForPrint2</key>
+	<false/>
+	<key>PasteSpecialRegex</key>
+	<string></string>
+	<key>PasteSpecialSubstitution</key>
+	<string></string>
+	<key>PasteSpecialUseRegexSubstitution</key>
 	<false/>
 	<key>PasteTabToStringTabStopSize</key>
 	<integer>4</integer>
