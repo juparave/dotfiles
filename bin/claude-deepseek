@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Check if DEEPSEEK_API_KEY is set
+if [ -z "$DEEPSEEK_API_KEY" ]; then
+    echo "Error: DEEPSEEK_API_KEY is not set" >&2
+    exit 1
+fi
+
+# Set environment variables for DeepSeek API compatibility
+export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+export ANTHROPIC_AUTH_TOKEN=${DEEPSEEK_API_KEY}
+export ANTHROPIC_MODEL=deepseek-chat
+export ANTHROPIC_SMALL_FAST_MODEL=deepseek-chat
+
+echo "Environment variables set for DeepSeek API compatibility"
+echo "Running claude with DeepSeek configuration..."
+
+# Run claude command with all passed arguments
+claude "$@"
