@@ -161,7 +161,7 @@ return require('packer').startup(function(use)
     --    run = function() vim.fn["mkdp#util#install"]() end,
     --  })
     --
-    --  use 'lewis6991/gitsigns.nvim'
+    use 'lewis6991/gitsigns.nvim'
     --  use 'dinhhuy258/git.nvim' -- For git blame & browse
 
     -- ChatGPT
