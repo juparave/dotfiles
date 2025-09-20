@@ -67,10 +67,9 @@ require("mason-lspconfig").setup({
 })
 
 -- Manual setup for each server to ensure only one instance
-local lspconfig = require("lspconfig")
-
 -- Lua LSP
-lspconfig.lua_ls.setup({
+vim.lsp.config.lua_ls = {
+	cmd = { 'lua-language-server' },
 	on_attach = on_attach,
 	capabilities = capabilities,
 	settings = {
@@ -90,12 +89,12 @@ lspconfig.lua_ls.setup({
 			},
 		},
 	},
-})
+}
 
-lspconfig.gopls.setup({
+vim.lsp.config.gopls = {
+	cmd = { "gopls" }, -- Use simple command, let mason handle the path
 	on_attach = on_attach,
 	capabilities = capabilities,
-	cmd = { "gopls" }, -- Use simple command, let mason handle the path
 	settings = {
 		gopls = {
 			analyses = {
@@ -105,14 +104,15 @@ lspconfig.gopls.setup({
 			gofumpt = true,
 		},
 	},
-})
+}
 
 -- TypeScript LSP (primary for Angular/JS/TS projects)
-lspconfig.ts_ls.setup({
+vim.lsp.config.ts_ls = {
+	cmd = { 'typescript-language-server', '--stdio' },
 	on_attach = on_attach,
 	capabilities = capabilities,
 	filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
-	root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", "jsconfig.json"),
+	root_dir = require('lspconfig.util').root_pattern("package.json", "tsconfig.json", "jsconfig.json"),
 	settings = {
 		typescript = {
 			preferences = {
@@ -120,10 +120,11 @@ lspconfig.ts_ls.setup({
 			},
 		},
 	},
-})
+}
 
 -- Angular LSP (for Angular-specific features)
-lspconfig.angularls.setup({
+vim.lsp.config.angularls = {
+	cmd = { 'ngserver', '--stdio', '--tsProbeLocations', '', '--ngProbeLocations', '' },
 	on_attach = function(client, bufnr)
 		-- Disable formatting, let ts_ls handle it
 		client.server_capabilities.documentFormattingProvider = false
@@ -132,11 +133,12 @@ lspconfig.angularls.setup({
 	end,
 	capabilities = capabilities,
 	filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx" },
-	root_dir = lspconfig.util.root_pattern("angular.json", "project.json"),
-})
+	root_dir = require('lspconfig.util').root_pattern("angular.json", "project.json"),
+}
 
 -- Svelte LSP
-lspconfig.svelte.setup({
+vim.lsp.config.svelte = {
+	cmd = { 'svelteserver', '--stdio' },
 	on_attach = function(client, bufnr)
 		-- Enable formatting for svelte files
 		client.server_capabilities.documentFormattingProvider = true
@@ -144,7 +146,7 @@ lspconfig.svelte.setup({
 	end,
 	capabilities = capabilities,
 	filetypes = { "svelte" },
-	root_dir = lspconfig.util.root_pattern("svelte.config.js", "svelte.config.mjs", "package.json"),
+	root_dir = require('lspconfig.util').root_pattern("svelte.config.js", "svelte.config.mjs", "package.json"),
 	settings = {
 		svelte = {
 			plugin = {
@@ -161,10 +163,11 @@ lspconfig.svelte.setup({
 			},
 		},
 	},
-})
+}
 
 -- Python LSP
-lspconfig.pyright.setup({
+vim.lsp.config.pyright = {
+	cmd = { 'pyright-langserver', '--stdio' },
 	on_attach = on_attach,
 	capabilities = capabilities,
 	settings = {
@@ -176,11 +179,12 @@ lspconfig.pyright.setup({
 			},
 		},
 	},
-})
+}
 
 -- ESLint LSP
 local util = require("lspconfig.util")
-lspconfig.eslint.setup({
+vim.lsp.config.eslint = {
+	cmd = { 'vscode-eslint-language-server', '--stdio' },
 	on_attach = function(client, bufnr)
 		-- Enable formatting and code actions
 		client.server_capabilities.documentFormattingProvider = true
@@ -231,7 +235,7 @@ lspconfig.eslint.setup({
 			mode = "location",
 		},
 	},
-})
+}
 
 -- Enhanced diagnostic configuration
 vim.diagnostic.config({
