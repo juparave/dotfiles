@@ -5,16 +5,18 @@ if not ok then
   return
 end
 
+
+
 copilot_chat.setup({
   debug = false,
   log_level = "info",
-  
+
   -- Model selection
   model = "gpt-4.1",
-  
+
   -- Default context settings
   context = "buffers",
-  
+
   -- Selection function
   selection = function(source)
     local select_ok, select = pcall(require, "CopilotChat.select")
@@ -23,24 +25,24 @@ copilot_chat.setup({
     end
     return nil
   end,
-  
+
   -- Window settings
   window = {
     layout = "vertical", -- Creates a vertical split (left/right)
-    width = 0.4, -- Takes up 40% of the screen width  
-    height = 1.0, -- Full height
+    width = 0.4,       -- Takes up 40% of the screen width
+    height = 1.0,      -- Full height
     relative = "editor",
     border = "single",
     title = "Copilot Chat",
     zindex = 1,
   },
-  
+
   -- Chat settings
   show_help = true,
   auto_follow_cursor = true,
   auto_insert_mode = false,
   clear_chat_on_new_prompt = false,
-  
+
   -- Simple prompts without dependencies
   prompts = {
     Explain = {
@@ -62,8 +64,11 @@ copilot_chat.setup({
       prompt = "Please generate tests for my code.",
     },
     Commit = {
-      prompt = "Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.",
-      context = "git:staged",
+      prompt =
+      "Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.",
+      selection = function(source)
+        return require("CopilotChat.select").gitdiff(source)
+      end,
     },
   },
 })
@@ -72,8 +77,18 @@ copilot_chat.setup({
 local opts = { noremap = true, silent = true }
 
 -- Basic chat commands
-vim.keymap.set("n", "<leader>cc", "<cmd>CopilotChat<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Open chat" }))
-vim.keymap.set("x", "<leader>cc", "<cmd>CopilotChat<cr>", vim.tbl_extend("force", opts, { desc = "CopilotChat - Chat with selection" }))
+vim.keymap.set(
+  "n",
+  "<leader>cc",
+  "<cmd>CopilotChat<cr>",
+  vim.tbl_extend("force", opts, { desc = "CopilotChat - Open chat" })
+)
+vim.keymap.set(
+  "x",
+  "<leader>cc",
+  "<cmd>CopilotChat<cr>",
+  vim.tbl_extend("force", opts, { desc = "CopilotChat - Chat with selection" })
+)
 
 -- Quick chat
 vim.keymap.set("n", "<leader>cq", function()
@@ -101,17 +116,31 @@ vim.keymap.set("n", "<leader>cf", function()
 end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Fix code" }))
 
 vim.keymap.set("n", "<leader>co", function()
-  require("CopilotChat").ask("Optimize this code for performance and readability", { selection = require("CopilotChat.select").buffer })
+  require("CopilotChat").ask(
+    "Optimize this code for performance and readability",
+    { selection = require("CopilotChat.select").buffer }
+  )
 end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Optimize code" }))
 
 vim.keymap.set("n", "<leader>cd", function()
-  require("CopilotChat").ask("Add documentation comments to this code", { selection = require("CopilotChat.select").buffer })
+  require("CopilotChat").ask(
+    "Add documentation comments to this code",
+    { selection = require("CopilotChat.select").buffer }
+  )
 end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Add documentation" }))
 
--- Git integration
+-- Git integration using built-in CopilotChatCommit
 vim.keymap.set("n", "<leader>cm", function()
-  require("CopilotChat").ask("Write a commit message for the staged changes using commitizen convention", { context = "git:staged" })
+  vim.cmd("CopilotChatCommit")
 end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Generate commit message" }))
+
+-- Alternative: Use predefined Commit prompt
+vim.keymap.set("n", "<leader>cM", function()
+  local actions = require("CopilotChat.actions")
+  actions.pick(actions.prompt_actions({
+    selection = require("CopilotChat.select").gitdiff,
+  }))
+end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Pick commit prompt" }))
 
 -- Visual mode versions of prompts
 vim.keymap.set("x", "<leader>ce", function()
