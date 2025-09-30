@@ -59,11 +59,9 @@ end
 require("mason").setup()
 
 require("mason-lspconfig").setup({
-	ensure_installed = { "lua_ls", "gopls", "pyright", "angularls", "ts_ls", "eslint", "svelte" }, -- Specify the servers you want to ensure are installed
-	automatic_installation = false, -- Disable automatic installation
-	automatic_enable = {
-		exclude = { "gopls", "angularls", "svelteserver" }, -- Exclude servers from automatic enabling
-	},
+	ensure_installed = { "lua_ls", "gopls", "pyright", "angularls", "ts_ls", "eslint", "svelte" },
+	automatic_installation = false,
+	handlers = {}, -- Empty handlers to prevent automatic setup
 })
 
 -- Manual setup for each server to ensure only one instance
@@ -92,18 +90,9 @@ vim.lsp.config.lua_ls = {
 }
 
 vim.lsp.config.gopls = {
-	cmd = { "gopls" }, -- Use simple command, let mason handle the path
+	cmd = { "gopls" },
 	on_attach = on_attach,
 	capabilities = capabilities,
-	settings = {
-		gopls = {
-			analyses = {
-				unusedparams = true,
-			},
-			staticcheck = true,
-			gofumpt = true,
-		},
-	},
 }
 
 -- TypeScript LSP (primary for Angular/JS/TS projects)
@@ -262,3 +251,12 @@ for type, icon in pairs(signs) do
 	local hl = "DiagnosticSign" .. type
 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
+
+-- Enable LSP servers
+vim.lsp.enable('lua_ls')
+vim.lsp.enable('gopls')
+vim.lsp.enable('ts_ls')
+vim.lsp.enable('angularls')
+vim.lsp.enable('svelte')
+vim.lsp.enable('pyright')
+vim.lsp.enable('eslint')

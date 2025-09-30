@@ -85,7 +85,6 @@ return require('packer').startup(function(use)
     -- Svelte plugins for linting, highliting and prettifing
     use 'pangloss/vim-javascript'
     use 'maxmellon/vim-jsx-pretty'
-    use 'w0rp/ale'
     use 'burner/vim-svelte'
     use 'leafOfTree/vim-svelte-plugin'
 
