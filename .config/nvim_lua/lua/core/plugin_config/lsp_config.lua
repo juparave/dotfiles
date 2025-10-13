@@ -113,7 +113,14 @@ vim.lsp.config.ts_ls = {
 
 -- Angular LSP (for Angular-specific features)
 vim.lsp.config.angularls = {
-	cmd = { 'ngserver', '--stdio', '--tsProbeLocations', '', '--ngProbeLocations', '' },
+	cmd = {
+		'ngserver',
+		'--stdio',
+		'--tsProbeLocations',
+		vim.fn.getcwd() .. '/node_modules',
+		'--ngProbeLocations',
+		vim.fn.getcwd() .. '/node_modules'
+	},
 	on_attach = function(client, bufnr)
 		-- Disable formatting, let ts_ls handle it
 		client.server_capabilities.documentFormattingProvider = false
