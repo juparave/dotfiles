@@ -11,10 +11,40 @@ local actions = require('telescope.actions')
 -- silversearcher-ag
 
 
+-- Custom buffer previewer that handles I/O errors gracefully
+local buffer_previewer_maker = function(filepath, bufnr, opts)
+    opts = opts or {}
+
+    -- Wrap in pcall to catch I/O errors
+    local ok, err = pcall(function()
+        require('telescope.previewers').buffer_previewer_maker(filepath, bufnr, opts)
+    end)
+
+    if not ok then
+        -- If there's an error, display a message in the preview buffer instead of crashing
+        vim.schedule(function()
+            if vim.api.nvim_buf_is_valid(bufnr) then
+                vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, {
+                    'Error previewing file:',
+                    filepath,
+                    '',
+                    'Reason: ' .. tostring(err),
+                    '',
+                    'This may be due to:',
+                    '- Broken symlink',
+                    '- Permission issues',
+                    '- Special file type (device, socket, etc.)',
+                })
+            end
+        end)
+    end
+end
+
 telescope.setup {
     defaults = {
         -- Default configuration for telescope goes here:
         -- config_key = value,
+        buffer_previewer_maker = buffer_previewer_maker,
         mappings = {
             i = {
                 -- map actions.which_key to <C-h> (default: <C-/>)
