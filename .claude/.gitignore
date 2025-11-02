@@ -3,6 +3,8 @@ shell-snapshots/
 todos/
 projects/
 statsig/
+debug/
+file-history/
 
 # Personal settings and state
 config/notification_states.json
@@ -10,3 +12,4 @@ config/notification_states.json
 # System files
 .DS_Store
 *.log
+history.jsonl
