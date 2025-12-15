@@ -5,8 +5,35 @@
       "command": "gopls"
     },
     "typescript": {
-      "command": "/Users/pablito/.local/share/nvim/mason/packages/typescript-language-server/node_modules/.bin/typescript-language-server",
+      "command": "typescript-language-server",
       "args": ["--stdio"]
+    }
+  },
+  "providers": {
+    "ollama": {
+      "name": "Ollama",
+      "base_url": "http://localhost:11434/v1/",
+      "type": "openai",
+      "models": [
+        {
+          "name": "Qwen 3 Coder 30B",
+          "id": "qwen3-coder",
+          "context_window": 256000,
+          "default_max_tokens": 20000
+        },
+        {
+          "name": "GPT-OSS 20B",
+          "id": "gpt-oss:20b",
+          "context_window": 131072,
+          "default_max_tokens": 20000
+        }
+      ]
+    },
+    "zai": {
+      "id": "zai",
+      "name": "ZAI Provider",
+      "base_url": "https://api.z.ai/api/coding/paas/v4",
+      "api_key": "b455abfd284d4a42bdccc0275e9c5906.9RsFsDkCWc3G50JM"
     }
   },
   "mcp": {
@@ -15,39 +42,11 @@
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp"]
     },
-    "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
-    }
-  },
-  "providers": {
-    "ollama": {
-      "name": "Ollama",
-      "base_url": "http://localhost:11434/v1/",
-      "type": "openai",
-      "api_key": "dummy",
-      "models": [
-        {
-          "name": "OpenAI GPT OSS",
-          "id": "gpt-oss:latest",
-          "context_window": 128000,
-          "default_max_tokens": 20000,
-          "can_reason": true
-        },
-        {
-          "name": "Deepseek r1:8b",
-          "id": "deepseek-r1:8b",
-          "context_window": 128000,
-          "default_max_tokens": 20000
-        },
-        {
-          "name": "Qwen3 Coder",
-          "id": "qwen3-coder",
-          "context_window": 256000,
-          "default_max_tokens": 20000
-        }
-      ]
+    "mcp-curl-server": {
+        "command": "uv",
+        "type": "stdio",
+        "args": ["run", "/Users/pablito/workspace/python/mymcps/mcp-curl-server/server.py"],
+        "env": {}
     }
   }
 }
