@@ -1,4 +1,5 @@
 require("lsp-format").setup({})
+local util = require("lspconfig.util")
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
@@ -50,24 +51,21 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
 	vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
 	vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
-	-- vim.keymap.set("n", "<leader>f", function()
-	-- 	vim.lsp.buf.format({ async = true })
-	-- end, opts)
 end
 
--- Set up mason for package management only (no automatic LSP setup)
+-- Set up mason for package management only
 require("mason").setup()
 
 require("mason-lspconfig").setup({
 	ensure_installed = { "lua_ls", "gopls", "pyright", "angularls", "ts_ls", "eslint", "svelte" },
 	automatic_installation = false,
-	handlers = {}, -- Empty handlers to prevent automatic setup
 })
 
--- Manual setup for each server to ensure only one instance
+-- Manual setup for each server using vim.lsp.config (New API)
+
 -- Lua LSP
 vim.lsp.config.lua_ls = {
-	cmd = { 'lua-language-server' },
+	cmd = { "lua-language-server" },
 	on_attach = on_attach,
 	capabilities = capabilities,
 	settings = {
@@ -89,6 +87,7 @@ vim.lsp.config.lua_ls = {
 	},
 }
 
+-- Go LSP
 vim.lsp.config.gopls = {
 	cmd = { "gopls" },
 	on_attach = on_attach,
@@ -97,11 +96,11 @@ vim.lsp.config.gopls = {
 
 -- TypeScript LSP (primary for Angular/JS/TS projects)
 vim.lsp.config.ts_ls = {
-	cmd = { 'typescript-language-server', '--stdio' },
+	cmd = { "typescript-language-server", "--stdio" },
 	on_attach = on_attach,
 	capabilities = capabilities,
 	filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
-	root_dir = require('lspconfig.util').root_pattern("package.json", "tsconfig.json", "jsconfig.json"),
+	root_dir = util.root_pattern("package.json", "tsconfig.json", "jsconfig.json"),
 	settings = {
 		typescript = {
 			preferences = {
@@ -113,14 +112,17 @@ vim.lsp.config.ts_ls = {
 
 -- Angular LSP (for Angular-specific features)
 vim.lsp.config.angularls = {
-	cmd = {
-		'ngserver',
-		'--stdio',
-		'--tsProbeLocations',
-		vim.fn.getcwd() .. '/node_modules',
-		'--ngProbeLocations',
-		vim.fn.getcwd() .. '/node_modules'
-	},
+	cmd = { "ngserver", "--stdio", "--tsProbeLocations", "", "--ngProbeLocations", "" },
+	on_new_config = function(new_config, new_root_dir)
+		new_config.cmd = {
+			"ngserver",
+			"--stdio",
+			"--tsProbeLocations",
+			new_root_dir .. "/node_modules",
+			"--ngProbeLocations",
+			new_root_dir .. "/node_modules",
+		}
+	end,
 	on_attach = function(client, bufnr)
 		-- Disable formatting, let ts_ls handle it
 		client.server_capabilities.documentFormattingProvider = false
@@ -129,12 +131,12 @@ vim.lsp.config.angularls = {
 	end,
 	capabilities = capabilities,
 	filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx" },
-	root_dir = require('lspconfig.util').root_pattern("angular.json", "project.json"),
+	root_dir = util.root_pattern("angular.json", "project.json"),
 }
 
 -- Svelte LSP
 vim.lsp.config.svelte = {
-	cmd = { 'svelteserver', '--stdio' },
+	cmd = { "svelteserver", "--stdio" },
 	on_attach = function(client, bufnr)
 		-- Enable formatting for svelte files
 		client.server_capabilities.documentFormattingProvider = true
@@ -142,7 +144,7 @@ vim.lsp.config.svelte = {
 	end,
 	capabilities = capabilities,
 	filetypes = { "svelte" },
-	root_dir = require('lspconfig.util').root_pattern("svelte.config.js", "svelte.config.mjs", "package.json"),
+	root_dir = util.root_pattern("svelte.config.js", "svelte.config.mjs", "package.json"),
 	settings = {
 		svelte = {
 			plugin = {
@@ -163,7 +165,7 @@ vim.lsp.config.svelte = {
 
 -- Python LSP
 vim.lsp.config.pyright = {
-	cmd = { 'pyright-langserver', '--stdio' },
+	cmd = { "pyright-langserver", "--stdio" },
 	on_attach = on_attach,
 	capabilities = capabilities,
 	settings = {
@@ -178,9 +180,8 @@ vim.lsp.config.pyright = {
 }
 
 -- ESLint LSP
-local util = require("lspconfig.util")
 vim.lsp.config.eslint = {
-	cmd = { 'vscode-eslint-language-server', '--stdio' },
+	cmd = { "vscode-eslint-language-server", "--stdio" },
 	on_attach = function(client, bufnr)
 		-- Enable formatting and code actions
 		client.server_capabilities.documentFormattingProvider = true
@@ -260,10 +261,10 @@ for type, icon in pairs(signs) do
 end
 
 -- Enable LSP servers
-vim.lsp.enable('lua_ls')
-vim.lsp.enable('gopls')
-vim.lsp.enable('ts_ls')
-vim.lsp.enable('angularls')
-vim.lsp.enable('svelte')
-vim.lsp.enable('pyright')
-vim.lsp.enable('eslint')
+vim.lsp.enable("lua_ls")
+vim.lsp.enable("gopls")
+vim.lsp.enable("ts_ls")
+vim.lsp.enable("angularls")
+vim.lsp.enable("svelte")
+vim.lsp.enable("pyright")
+vim.lsp.enable("eslint")
