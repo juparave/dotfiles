@@ -1,114 +1,77 @@
 #!/bin/bash
+set -euo pipefail
 
 echo "Docker Cleanup Script"
 echo "====================="
 
-# Function to convert human-readable sizes to KB for calculation
-convert_to_kb() {
-    local size=$1
-    # Extract number and unit
-    local number=$(echo $size | sed 's/[^0-9.]*$//')
-    local unit=$(echo $size | sed 's/^[0-9.]*//')
-    
-    case $unit in
-        "B")  echo "scale=2; $number/1024" | bc | xargs printf "%.0f" ;;
-        "kB") echo $number | xargs printf "%.0f" ;;
-        "MB") echo "$number * 1024" | bc | xargs printf "%.0f" ;;
-        "GB") echo "$number * 1024 * 1024" | bc | xargs printf "%.0f" ;;
-        "TB") echo "$number * 1024 * 1024 * 1024" | bc | xargs printf "%.0f" ;;
-        *)    echo 0 ;;
-    esac
+# Check Docker daemon is running
+if ! docker info &>/dev/null; then
+    echo "Error: Docker daemon is not running" >&2
+    exit 1
+fi
+
+# Convert a human-readable Docker size string (e.g. "1.5GB") to bytes
+to_bytes() {
+    awk -v s="$1" 'BEGIN {
+        n = s + 0
+        u = s; gsub(/[0-9.]+/, "", u)
+        if      (u == "B")  print int(n)
+        else if (u == "kB") print int(n * 1024)
+        else if (u == "MB") print int(n * 1024^2)
+        else if (u == "GB") print int(n * 1024^3)
+        else if (u == "TB") print int(n * 1024^4)
+        else                print 0
+    }'
 }
 
-# Remove all stopped containers and calculate reclaimed space
-echo ""
-echo "Removing all stopped containers..."
-container_output=$(docker container prune -f 2>&1)
-echo "$container_output"
+format_bytes() {
+    awk -v b="$1" 'BEGIN {
+        if      (b < 1024)   printf "%dB\n",      b
+        else if (b < 1024^2) printf "%.2fKB\n",   b / 1024
+        else if (b < 1024^3) printf "%.2fMB\n",   b / 1024^2
+        else if (b < 1024^4) printf "%.2fGB\n",   b / 1024^3
+        else                 printf "%.2fTB\n",   b / 1024^4
+    }'
+}
 
-# Extract reclaimed space from container prune output
-container_space=$(echo "$container_output" | grep "Total reclaimed space:" | sed 's/Total reclaimed space://' | xargs)
-container_space_formatted="0B"
-container_space_kb=0
+total_bytes=0
+declare -A reclaimed  # label -> human-readable size
 
-if [ -n "$container_space" ] && [ "$container_space" != "0B" ]; then
-    container_space_formatted="$container_space"
-    container_space_kb=$(convert_to_kb "$container_space")
-    echo "Space reclaimed from containers: $container_space_formatted"
-else
-    echo "No space reclaimed from containers or operation not supported"
-fi
+# Run a prune command, print its output, and accumulate reclaimed space.
+# Usage: run_prune <label> <grep-pattern> <docker command...>
+run_prune() {
+    local label="$1" pattern="$2"
+    shift 2
 
-# Remove build cache objects and calculate reclaimed space
-echo ""
-echo "Removing build cache objects..."
-cache_output=$(docker builder prune -f 2>&1)
-echo "$cache_output"
+    echo ""
+    echo "${label}..."
+    local output
+    output=$("$@" 2>&1)
+    echo "$output"
 
-# Extract total from build cache output
-build_cache_space=$(echo "$cache_output" | grep "Total:" | sed 's/.*Total:[[:space:]]*//' | xargs)
-build_cache_space_kb=0
-build_cache_space_formatted="0B"
+    local space
+    space=$(echo "$output" | grep -E "$pattern" | awk '{print $NF}' || true)
 
-if [ -n "$build_cache_space" ] && [ "$build_cache_space" != "0B" ]; then
-    build_cache_space_formatted="$build_cache_space"
-    build_cache_space_kb=$(convert_to_kb "$build_cache_space")
-    echo "Space reclaimed from build cache: $build_cache_space_formatted"
-else
-    echo "No space reclaimed from build cache or operation not supported"
-fi
+    reclaimed["$label"]="${space:-0B}"
+    if [ -n "$space" ] && [ "$space" != "0B" ]; then
+        local bytes
+        bytes=$(to_bytes "$space")
+        total_bytes=$(( total_bytes + bytes ))
+    fi
+}
 
-# Remove all dangling images and calculate reclaimed space
-echo ""
-echo "Removing all dangling images..."
-image_output=$(docker image prune -a -f 2>&1)
-echo "$image_output"
+run_prune "Containers"  "Total reclaimed space:"  docker container prune -f
+run_prune "Build cache" "^Total:"                 docker builder prune -a -f
+run_prune "Images"      "Total reclaimed space:"  docker image prune -a -f
+run_prune "Volumes"     "Total reclaimed space:"  docker volume prune -f
+run_prune "Networks"    "Total reclaimed space:"  docker network prune -f
 
-# Extract reclaimed space from image prune output
-image_space=$(echo "$image_output" | grep "Total reclaimed space:" | sed 's/Total reclaimed space://' | xargs)
-image_space_formatted="0B"
-image_space_kb=0
-
-if [ -n "$image_space" ] && [ "$image_space" != "0B" ]; then
-    image_space_formatted="$image_space"
-    image_space_kb=$(convert_to_kb "$image_space")
-    echo "Space reclaimed from images: $image_space_formatted"
-else
-    echo "No space reclaimed from images or operation not supported"
-fi
-
-# Remove system prune (unused networks and build cache) 
-echo ""
-echo "Removing unused networks and build cache..."
-system_output=$(docker system prune -f --volumes 2>&1)
-echo "$system_output"
-
-# Calculate total reclaimed space in KB
-total_kb=$(echo "$container_space_kb + $build_cache_space_kb + $image_space_kb" | bc)
-
-# Show final totals
 echo ""
 echo "==========================================="
 echo "SUMMARY:"
-echo "Space reclaimed from containers: $container_space_formatted"
-echo "Space reclaimed from build cache: $build_cache_space_formatted" 
-echo "Space reclaimed from images: $image_space_formatted"
-printf "TOTAL RECLAIMED SPACE: "
-if [ $total_kb -gt 0 ]; then
-    # Convert back to human readable format
-    if [ $total_kb -lt 1024 ]; then
-        echo "${total_kb}KB"
-    elif [ $total_kb -lt 1048576 ]; then
-        total_mb=$(echo "scale=2; $total_kb/1024" | bc)
-        echo "${total_mb}MB"
-    elif [ $total_kb -lt 1073741824 ]; then
-        total_gb=$(echo "scale=2; $total_kb/1048576" | bc)
-        echo "${total_gb}GB"
-    else
-        total_tb=$(echo "scale=2; $total_kb/1073741824" | bc)
-        echo "${total_tb}TB"
-    fi
-else
-    echo "0KB"
-fi
+for label in "Containers" "Build cache" "Images" "Volumes" "Networks"; do
+    printf "  %-14s %s\n" "${label}:" "${reclaimed[$label]:-0B}"
+done
+echo "-------------------------------------------"
+printf "  %-14s %s\n" "TOTAL:" "$(format_bytes "$total_bytes")"
 echo "==========================================="
