@@ -35,7 +35,6 @@ format_bytes() {
 }
 
 total_bytes=0
-declare -A reclaimed  # label -> human-readable size
 
 # Run a prune command, print its output, and accumulate reclaimed space.
 # Usage: run_prune <label> <grep-pattern> <docker command...>
@@ -51,8 +50,12 @@ run_prune() {
 
     local space
     space=$(echo "$output" | grep -E "$pattern" | awk '{print $NF}' || true)
+    
+    # Store in dynamic variable (Bash 3.2 compatibility)
+    local var_name
+    var_name="reclaimed_$(echo "$label" | tr -d ' ')"
+    eval "$var_name=\"${space:-0B}\""
 
-    reclaimed["$label"]="${space:-0B}"
     if [ -n "$space" ] && [ "$space" != "0B" ]; then
         local bytes
         bytes=$(to_bytes "$space")
@@ -70,7 +73,9 @@ echo ""
 echo "==========================================="
 echo "SUMMARY:"
 for label in "Containers" "Build cache" "Images" "Volumes" "Networks"; do
-    printf "  %-14s %s\n" "${label}:" "${reclaimed[$label]:-0B}"
+    var_name="reclaimed_$(echo "$label" | tr -d ' ')"
+    reclaimed_val=$(eval "echo \${$var_name:-0B}")
+    printf "  %-14s %s\n" "${label}:" "${reclaimed_val}"
 done
 echo "-------------------------------------------"
 printf "  %-14s %s\n" "TOTAL:" "$(format_bytes "$total_bytes")"
