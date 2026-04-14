@@ -4,6 +4,7 @@ import {
   Key,
   matchesKey,
   truncateToWidth,
+  visibleWidth,
   SelectList,
   type SelectListTheme,
   type Theme,
@@ -26,20 +27,27 @@ const SENSITIVE_PATTERNS = [
   /api[_-]?key/i, /\.pem$/, /\.key$/, /token/i, /password/i, /credential/i,
 ];
 
-// Session-based permissions
-const sessionAllowed = new Set<string>();
+// Session-level trust for non-bash tools: keyed by tool name.
+const sessionAllowedTools = new Set<string>();
 
-function getSessionKey(toolName: string, input: any): string {
-  if (toolName === "bash") {
-    return `bash:${input.command}`;
+// Session-level trust for bash: keyed by command stem (base + first non-flag subcommand).
+// e.g. "npm run build" → "npm run", "git commit -m ..." → "git commit", "ls -la" → "ls"
+const sessionAllowedBash = new Set<string>();
+
+function getBashSessionKey(command: string): string {
+  const parts = command.trim().split(/\s+/);
+  const base = parts[0];
+  const sub = parts[1];
+  // Include subcommand only if it's a plain word (not a flag, path, or filename)
+  if (sub && !sub.startsWith("-") && !sub.includes("/") && !sub.includes(".")) {
+    return `${base} ${sub}`;
   }
-  if (toolName === "read" || toolName === "write" || toolName === "edit") {
-    return `${toolName}:${input.path}`;
-  }
-  return `${toolName}:${JSON.stringify(input)}`;
+  return base;
 }
 
 // --- UI Components ---
+
+const DIALOG_WIDTH = 64;
 
 class PermissionPrompt {
   private list: SelectList;
@@ -54,8 +62,8 @@ class PermissionPrompt {
       selectedPrefix: (t) => theme.fg("accent", t),
       selectedText: (t) => theme.bg("selectedBg", t),
       description: (t) => theme.fg("text", t),
-      scrollInfo: (t) => theme.fg("text", t),
-      noMatch: (t) => theme.fg("text", t),
+      scrollInfo: (t) => theme.fg("muted", t),
+      noMatch: (t) => theme.fg("muted", t),
     };
 
     this.list = new SelectList(
@@ -75,20 +83,55 @@ class PermissionPrompt {
     if (matchesKey(data, "1")) { this.onDone("once"); return; }
     if (matchesKey(data, "2")) { this.onDone("session"); return; }
     if (matchesKey(data, "3") || matchesKey(data, Key.escape)) { this.onDone("deny"); return; }
+    // Vim-style navigation
+    if (matchesKey(data, "j")) { this.list.handleInput?.("\x1b[B"); return; }
+    if (matchesKey(data, "k")) { this.list.handleInput?.("\x1b[A"); return; }
     this.list.handleInput?.(data);
   }
 
   render(width: number): string[] {
-    const lines: string[] = [];
-    lines.push(truncateToWidth(this.theme.fg("accent", `Permission Request: ${this.toolName}`), width));
-    lines.push("");
+    // Inner content width = total - 2 borders - 2 padding spaces
+    const innerWidth = Math.max(0, width - 4);
+    const b = (t: string) => this.theme.fg("borderAccent", t);
+
+    // Wrap a line in border + background
+    const row = (line: string) => {
+      const truncated = truncateToWidth(line, innerWidth);
+      const padLen = Math.max(0, innerWidth - visibleWidth(truncated));
+      const padded = this.theme.bg("customMessageBg", truncated + " ".repeat(padLen));
+      return b("│") + " " + padded + " " + b("│");
+    };
+
+    // Top border with title embedded
+    const titleLabel = " Permission Request ";
+    const fillLen = Math.max(0, width - 2 - titleLabel.length);
+    const leftFill = Math.floor(fillLen / 2);
+    const rightFill = fillLen - leftFill;
+    const top = b("┌" + "─".repeat(leftFill)) + this.theme.fg("warning", titleLabel) + b("─".repeat(rightFill) + "┐");
+    const bottom = b("└" + "─".repeat(width - 2) + "┘");
+
+    const lines: string[] = [top, row("")];
+
+    // Tool name in warning color
+    lines.push(row(this.theme.fg("warning", `⚠  ${this.toolName}`)));
+    lines.push(row(""));
+
+    // Details
     for (const d of this.details) {
-      lines.push(truncateToWidth(this.theme.fg("text", d), width));
+      lines.push(row(this.theme.fg("text", d)));
     }
-    lines.push("");
-    lines.push(truncateToWidth(this.theme.fg("text", "  [1] once  [2] session  [3] deny"), width));
-    lines.push("");
-    lines.push(...this.list.render(width));
+    lines.push(row(""));
+
+    // Keyboard hint
+    lines.push(row(this.theme.fg("muted", "[1] once  [2] session  [3] deny")));
+    lines.push(row(""));
+
+    // SelectList
+    for (const l of this.list.render(innerWidth)) {
+      lines.push(row(l));
+    }
+
+    lines.push(row(""), bottom);
     return lines;
   }
 
@@ -145,10 +188,11 @@ function isSafeBash(command: string): boolean {
 export default function (pi: ExtensionAPI) {
   pi.on("tool_call", async (event, ctx) => {
     const { toolName, input } = event;
-    const sessionKey = getSessionKey(toolName, input);
 
     // 1. Check Session Permissions
-    if (sessionAllowed.has(sessionKey)) {
+    if (isToolCallEventType("bash", event)) {
+      if (sessionAllowedBash.has(getBashSessionKey(event.input.command))) return;
+    } else if (sessionAllowedTools.has(toolName)) {
       return;
     }
 
@@ -190,10 +234,21 @@ export default function (pi: ExtensionAPI) {
         handleInput: (d) => { prompt.handleInput(d); tui.requestRender(); },
         invalidate: () => prompt.invalidate(),
       };
-    }, { overlay: true });
+    }, {
+      overlay: true,
+      overlayOptions: {
+        width: DIALOG_WIDTH,
+        anchor: "center",
+        margin: 2,
+      },
+    });
 
     if (result === "session") {
-      sessionAllowed.add(sessionKey);
+      if (isToolCallEventType("bash", event)) {
+        sessionAllowedBash.add(getBashSessionKey(event.input.command));
+      } else {
+        sessionAllowedTools.add(toolName);
+      }
       return;
     } else if (result === "once") {
       return;
@@ -203,6 +258,7 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.on("session_start", () => {
-    sessionAllowed.clear();
+    sessionAllowedTools.clear();
+    sessionAllowedBash.clear();
   });
 }
