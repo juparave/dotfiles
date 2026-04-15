@@ -24,7 +24,7 @@ go, python
 
 node
 
-    $ brew install node@16
+    $ brew install node@22
     
 ag (the silver searcher)
 
