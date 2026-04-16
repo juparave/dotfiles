@@ -11,12 +11,13 @@ import {
 } from "@mariozechner/pi-tui";
 import { resolve, isAbsolute, relative } from "node:path";
 import { stat, readFile } from "node:fs/promises";
+import { homedir } from "node:os";
 
 // --- Configuration & State ---
 
 const SAFE_COMMANDS = new Set([
   "ls", "pwd", "git status", "git diff", "git log", "head", "tail",
-  "grep", "echo", "which", "type", "find", "du", "df", "ps aux"
+  "echo", "which", "type", "du", "df", "ps aux"
 ]);
 
 // Shell operators that could chain unsafe commands after a safe one
@@ -164,7 +165,7 @@ function isSensitive(path: string, cwd: string): boolean {
   let absPath = isAbsolute(path) ? path : resolve(cwd, path);
 
   if (path.startsWith("~/")) {
-    const home = process.env.HOME || "/home/pablito";
+    const home = process.env.HOME || homedir();
     absPath = resolve(home, path.slice(2));
   }
 
