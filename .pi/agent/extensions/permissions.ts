@@ -90,27 +90,24 @@ class PermissionPrompt {
   }
 
   render(width: number): string[] {
-    const innerWidth = width;
-
     const lines: string[] = [];
 
-    // Tool name in warning color
-    lines.push(this.theme.fg("warning", `⚠  ${this.toolName}`));
+    const fit = (s: string): string =>
+      visibleWidth(s) > width ? truncateToWidth(s, width) : s;
+
+    lines.push(this.theme.fg("warning", fit(`⚠  ${this.toolName}`)));
     lines.push("");
 
-    // Details
     for (const d of this.details) {
-      lines.push(this.theme.fg("text", d));
+      lines.push(this.theme.fg("text", fit(d)));
     }
     lines.push("");
 
-    // Keyboard hint
-    lines.push(this.theme.fg("muted", "[1] once  [2] session  [3] deny"));
+    lines.push(this.theme.fg("muted", fit("[1] once  [2] session  [3] deny")));
     lines.push("");
 
-    // SelectList
-    for (const l of this.list.render(innerWidth)) {
-      lines.push(l);
+    for (const l of this.list.render(width)) {
+      lines.push(fit(l));
     }
     return lines;
   }
