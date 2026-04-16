@@ -122,6 +122,17 @@ if command -v yarn &> /dev/null; then
     trash_path "/Users/$USER/Library/Caches/Yarn"
 fi
 
+# --- Node modules & JS framework caches ---
+echo "Cleaning node_modules and JS framework cache dirs under ~/workspace..."
+find ~/workspace -name "node_modules" -type d -prune -print0 | while IFS= read -r -d $'\0' dir; do
+    rm_path "$dir"
+done
+for cache_name in ".angular" ".svelte-kit" ".nuxt" ".output" ".next" ".vite" ".turbo"; do
+    find ~/workspace -name "$cache_name" -type d -prune -print0 | while IFS= read -r -d $'\0' dir; do
+        rm_path "$dir"
+    done
+done
+
 # --- Go ---
 if command -v go &> /dev/null; then
     echo "Cleaning Go build cache..."
