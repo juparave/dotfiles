@@ -48,7 +48,6 @@ function getBashSessionKey(command: string): string {
 
 // --- UI Components ---
 
-const DIALOG_WIDTH = 64;
 
 class PermissionPrompt {
   private list: SelectList;
@@ -91,48 +90,28 @@ class PermissionPrompt {
   }
 
   render(width: number): string[] {
-    // Inner content width = total - 2 borders - 2 padding spaces
-    const innerWidth = Math.max(0, width - 4);
-    const b = (t: string) => this.theme.fg("borderAccent", t);
+    const innerWidth = width;
 
-    // Wrap a line in border + background
-    const row = (line: string) => {
-      const truncated = truncateToWidth(line, innerWidth);
-      const padLen = Math.max(0, innerWidth - visibleWidth(truncated));
-      const padded = this.theme.bg("customMessageBg", truncated + " ".repeat(padLen));
-      return b("│") + " " + padded + " " + b("│");
-    };
-
-    // Top border with title embedded
-    const titleLabel = " Permission Request ";
-    const fillLen = Math.max(0, width - 2 - titleLabel.length);
-    const leftFill = Math.floor(fillLen / 2);
-    const rightFill = fillLen - leftFill;
-    const top = b("┌" + "─".repeat(leftFill)) + this.theme.fg("warning", titleLabel) + b("─".repeat(rightFill) + "┐");
-    const bottom = b("└" + "─".repeat(width - 2) + "┘");
-
-    const lines: string[] = [top, row("")];
+    const lines: string[] = [];
 
     // Tool name in warning color
-    lines.push(row(this.theme.fg("warning", `⚠  ${this.toolName}`)));
-    lines.push(row(""));
+    lines.push(this.theme.fg("warning", `⚠  ${this.toolName}`));
+    lines.push("");
 
     // Details
     for (const d of this.details) {
-      lines.push(row(this.theme.fg("text", d)));
+      lines.push(this.theme.fg("text", d));
     }
-    lines.push(row(""));
+    lines.push("");
 
     // Keyboard hint
-    lines.push(row(this.theme.fg("muted", "[1] once  [2] session  [3] deny")));
-    lines.push(row(""));
+    lines.push(this.theme.fg("muted", "[1] once  [2] session  [3] deny"));
+    lines.push("");
 
     // SelectList
     for (const l of this.list.render(innerWidth)) {
-      lines.push(row(l));
+      lines.push(l);
     }
-
-    lines.push(row(""), bottom);
     return lines;
   }
 
@@ -235,13 +214,6 @@ export default function (pi: ExtensionAPI) {
         handleInput: (d) => { prompt.handleInput(d); tui.requestRender(); },
         invalidate: () => prompt.invalidate(),
       };
-    }, {
-      overlay: true,
-      overlayOptions: {
-        width: DIALOG_WIDTH,
-        anchor: "center",
-        margin: 2,
-      },
     });
 
     if (result === "session") {
