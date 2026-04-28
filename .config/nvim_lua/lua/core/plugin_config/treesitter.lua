@@ -5,7 +5,7 @@ local ts = require('nvim-treesitter')
 ts.setup()
 
 -- Install parsers on startup (equivalent to old ensure_installed)
-local parsers = { "c", "lua", "rust", "go", "vim", "javascript", "typescript" }
+local parsers = { "c", "lua", "rust", "go", "vim", "javascript", "typescript", "gitcommit", "diff", "git_rebase" }
 
 -- Defensive installation call for v1
 local function install_parsers()
