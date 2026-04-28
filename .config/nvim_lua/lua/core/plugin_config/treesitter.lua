@@ -5,7 +5,7 @@ require('nvim-treesitter').setup()
 
 -- Install parsers on startup (equivalent to old ensure_installed)
 local parsers = { "c", "lua", "rust", "go", "vim", "javascript", "typescript" }
-require('nvim-treesitter').install(parsers)
+require('nvim-treesitter.install').ensure_installed(parsers)
 
 -- Enable treesitter highlighting per filetype (replaces highlight.enable = true)
 vim.api.nvim_create_autocmd('FileType', {
