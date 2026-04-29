@@ -127,11 +127,15 @@ __bash_prompt() {
     local gitbranch='`\
         export BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null); \
         if [ "${BRANCH}" != "" ]; then \
-            echo -n "\[\033[0;36m\](\[\033[1;31m\]${BRANCH}" \
-            && if git ls-files --error-unmatch -m --directory --no-empty-directory -o --exclude-standard ":/*" > /dev/null 2>&1; then \
-                    echo -n " \[\033[1;33m\]✗"; \
-               fi \
-            && echo -n "\[\033[0;36m\]) "; \
+            echo -n "\[\033[0;36m\](\[\033[1;31m\]${BRANCH}"; \
+            if git ls-files --error-unmatch -m --directory --no-empty-directory -o --exclude-standard ":/*" > /dev/null 2>&1; then \
+                echo -n " \[\033[1;33m\]✗"; \
+            fi; \
+            AHEAD=$(git rev-list --count @{u}..HEAD 2>/dev/null); \
+            BEHIND=$(git rev-list --count HEAD..@{u} 2>/dev/null); \
+            [ -n "${AHEAD}" ] && [ "${AHEAD}" -gt 0 ] 2>/dev/null && echo -n " \[\033[1;32m\]↑${AHEAD}"; \
+            [ -n "${BEHIND}" ] && [ "${BEHIND}" -gt 0 ] 2>/dev/null && echo -n " \[\033[1;33m\]↓${BEHIND}"; \
+            echo -n "\[\033[0;36m\]) "; \
         fi`'
     local lightblue='\[\033[1;34m\]'
     local removecolor='\[\033[0m\]'
