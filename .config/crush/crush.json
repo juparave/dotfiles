@@ -16,6 +16,18 @@
       "type": "openai",
       "models": [
         {
+          "name": "Qwen 3.5 9B",
+          "id": "qwen3.5:9b",
+          "context_window": 256000,
+          "default_max_tokens": 20000
+        },
+        {
+          "name": "gpt-oss:20b",
+          "id": "gpt-oss:20b",
+          "context_window": 256000,
+          "default_max_tokens": 20000
+        },
+        {
           "name": "Qwen 3 Coder 30B",
           "id": "qwen3-coder",
           "context_window": 256000,
