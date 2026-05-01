@@ -39,6 +39,7 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 export TERM=xterm-256color
 
 ###-tns-completion-start-###
+### Nativescript CLI autocompletion
 if [ -f /Users/pablito/.tnsrc ]; then
     source /Users/pablito/.tnsrc
 fi
