@@ -145,6 +145,37 @@ if command -v pip &> /dev/null; then
     trash_path "/Users/$USER/Library/Caches/pip"
 fi
 
+# --- Safari ---
+echo "Cleaning Safari caches..."
+rm_path "/Users/$USER/Library/Safari/LocalStorage"
+rm_path "/Users/$USER/Library/Safari/WebKit/MediaCache"
+
+# --- Spotify ---
+echo "Cleaning Spotify cache..."
+rm_path "/Users/$USER/Library/Application Support/Spotify/PersistentCache/Storage"
+
+# --- Docker ---
+if command -v docker &> /dev/null; then
+    echo "Cleaning Docker unused data..."
+    if current_context=$(docker context show 2>/dev/null); then
+        if endpoint=$(docker context inspect "$current_context" --format '{{.Endpoints.docker.Host}}' 2>/dev/null); then
+            if [[ "$endpoint" == unix://* ]]; then
+                maybe_run "docker system prune -f" docker system prune -f
+            else
+                echo "  Docker is using a remote context ($endpoint), skipping."
+            fi
+        else
+            echo "  Unable to inspect Docker context, skipping."
+        fi
+    else
+        echo "  Unable to determine Docker context, skipping."
+    fi
+fi
+
+# --- Memory ---
+echo "Purging system memory cache..."
+maybe_run "sudo purge" sudo purge
+
 # --- Optional: Flutter Projects ---
 if command -v flutter &> /dev/null; then
     read -p "Do you want to clean all Flutter projects found under ~/workspace? (y/N) " -n 1 -r
