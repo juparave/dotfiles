@@ -1,157 +1,119 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
-
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
       *) return;;
 esac
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
+### Set vi mode
+set -o vi
 
-# append to the history file, don't overwrite it
+### history handling
+#
+# Erase duplicates
+export HISTCONTROL=erasedups
+# resize history size
+export HISTSIZE=8000
+export HISTFILESIZE=8000
+# append to bash_history if Terminal.app quits
 shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=9000
-HISTFILESIZE=10000
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
-
 # append to bash_history after each command is finished (multiple terminals)
 export PROMPT_COMMAND='history -a'
 
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
-
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-        # We have color support; assume it's compliant with Ecma-48
-        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-        # a case would tend to support setf rather than setaf.)
-        color_prompt=yes
-    else
-        color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
-alias ll='ls -alF'
+### Basic aliases
+alias ll="ls -lsa"
 alias la='ls -A'
 alias l='ls -CF'
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+# Use system sqlite3 — Android SDK platform-tools shadows it and lacks readline
+alias sqlite3=/usr/bin/sqlite3
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+export CLICOLOR=1
+export LSCOLORS=GxFxCxDxBxegedabagaced
+
+# telling tmux to support colors
+export TERM=xterm-256color
+
+###-tns-completion-start-###
+### Nativescript CLI autocompletion
+if [ -f /Users/pablito/.tnsrc ]; then
+    source /Users/pablito/.tnsrc
+fi
+###-tns-completion-end-###
+
+### Search faster in vim
+if type rg &> /dev/null; then
+    export FZF_DEFAULT_COMMAND='rg --files'
+    export FZF_DEFAULT_OPTS='-m --height 50% --border'
 fi
 
-# Codespaces bash prompt theme
-__bash_prompt() {
-    local userpart='`export XIT=$? \
-        && [ ! -z "${GITHUB_USER}" ] && echo -n "\[\033[0;32m\]@${GITHUB_USER} " || echo -n "\[\033[0;32m\]\u " \
-        && [ "$XIT" -ne "0" ] && echo -n "\[\033[1;31m\]➜" || echo -n "\[\033[0m\]➜"`'
-    local gitbranch='`\
-        export BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null); \
-        if [ "${BRANCH}" != "" ]; then \
-            echo -n "\[\033[0;36m\](\[\033[1;31m\]${BRANCH}"; \
-            if git ls-files --error-unmatch -m --directory --no-empty-directory -o --exclude-standard ":/*" > /dev/null 2>&1; then \
-                echo -n " \[\033[1;33m\]✗"; \
-            fi; \
-            AHEAD=$(git rev-list --count @{u}..HEAD 2>/dev/null); \
-            BEHIND=$(git rev-list --count HEAD..@{u} 2>/dev/null); \
-            [ -n "${AHEAD}" ] && [ "${AHEAD}" -gt 0 ] 2>/dev/null && echo -n " \[\033[1;32m\]↑${AHEAD}"; \
-            [ -n "${BEHIND}" ] && [ "${BEHIND}" -gt 0 ] 2>/dev/null && echo -n " \[\033[1;33m\]↓${BEHIND}"; \
-            echo -n "\[\033[0;36m\]) "; \
-        fi`'
-    local lightblue='\[\033[1;34m\]'
-    local removecolor='\[\033[0m\]'
-    PS1="${userpart} ${lightblue}\w ${gitbranch}${removecolor}\$ "
-    unset -f __bash_prompt
+### Bash procedure to quickly change directory
+workon() {
+    if [[ -n $1 ]]; then
+        selected=$(find ~/workspace/python ~/workspace/xb ~/workspace/go ~/workspace/flutter ~/workspace/angular ~/workspace/svelte ~/workspace/elm -mindepth 1 -maxdepth 1 -type d | fzf --query $1)
+    else
+        selected=$(find ~/workspace/python ~/workspace/xb ~/workspace/go ~/workspace/flutter ~/workspace/angular ~/workspace/svelte ~/workspace/elm -mindepth 1 -maxdepth 1 -type d | fzf)
+    fi
+
+    if [[ -z $selected ]]; then
+        return 0
+    fi
+
+    cd $selected
+    actvenv
 }
-__bash_prompt
+
+evoworkon() {
+    WS=~/EVOworkspace
+    if [[ -n $1 ]]; then
+        selected=$(find $WS/xb $WS/python $WS/go $WS/flutter $WS/angular $WS/svelte $WS/php -mindepth 1 -maxdepth 1 -type d | fzf --query $1)
+    else
+        selected=$(find $WS/xb $WS/python $WS/go $WS/flutter $WS/angular $WS/svelte $WS/php -mindepth 1 -maxdepth 1 -type d | fzf)
+    fi
+
+    if [[ -z $selected ]]; then
+        return 0
+    fi
+
+    cd $selected
+    actvenv
+}
+
+### Bash procedure to load python venv if exists on current directory
+actvenv() {
+    # get the most recent venv directory if any
+    # venv=$(find . -maxdepth 1 -type d -name "*env" -exec stat -lt "%Y-%m-%d" {} \+ | cut -d' ' -f7- | sort -n | tail -1)
+    venv=$(find . -maxdepth 1 -type d -name "*env" -exec stat -lt "%Y-%m-%d" {} \+ | cut -d' ' -f7- | sort -nr | head -1)
+    if [[ -n $venv ]]; then
+        echo "Found python venv at $venv, activating it"
+        source $venv/bin/activate
+    fi
+}
+
+### Prompt
+export PS1="\[$(tput setaf 5)\]\u\[$(tput sgr0)\] at \[$(tput setaf 3)\]\h\[$(tput sgr0)\] in \[$(tput bold)\]\[$(tput setaf 2)\]\w\n\[$(tput sgr0)\]↳ \\$ \[$(tput sgr0)\]"
+## Shortening paths in the Bash prompt
 export PROMPT_DIRTRIM=4
 
-export NVM_DIR="$HOME/.nvm"
-__load_nvm() {
-    unset -f nvm node npm npx __load_nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-}
-nvm() { __load_nvm; nvm "$@"; }
-node() { __load_nvm; node "$@"; }
-npm() { __load_nvm; npm "$@"; }
-npx() { __load_nvm; npx "$@"; }
+### Fortune and Cowsay
+if command -v fortune &>/dev/null && command -v cowsay &>/dev/null; then
+    fortune | cowsay -n
+fi
+if command -v rbenv &>/dev/null; then eval "$(rbenv init -)"; fi
+
+
+# Load Angular CLI autocompletion.
+#source <(ng completion script)
+
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+
+
+# Added by Antigravity CLI installer
+export PATH="/Users/pablito/.local/bin:$PATH"
