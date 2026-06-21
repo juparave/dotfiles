@@ -1,0 +1,147 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+script_name="$(basename "$0")"
+run_build_runner=0
+
+usage() {
+  cat <<USAGE
+Usage: $script_name [--build-runner]
+
+Run the usual formatting and analysis checks for common project folders in the
+current git repository.
+
+Options:
+  -b, --build-runner  Also run Flutter build_runner in app/
+  -h, --help          Show this help
+USAGE
+}
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    -b|--build-runner)
+      run_build_runner=1
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+  shift
+done
+
+if git_root="$(git rev-parse --show-toplevel 2>/dev/null)"; then
+  cd "$git_root"
+else
+  echo "Error: $script_name must be run inside a git repository." >&2
+  exit 1
+fi
+
+if [ -t 1 ] && command -v tput >/dev/null 2>&1; then
+  bold="$(tput bold)"
+  green="$(tput setaf 2)"
+  yellow="$(tput setaf 3)"
+  reset="$(tput sgr0)"
+else
+  bold=""
+  green=""
+  yellow=""
+  reset=""
+fi
+
+ran_any=0
+
+section() {
+  printf "\n%s==> %s%s\n" "$bold" "$1" "$reset"
+}
+
+run_in() {
+  local dir="$1"
+  shift
+
+  ran_any=1
+  section "$dir"
+  (
+    cd "$dir"
+    "$@"
+  )
+}
+
+run_server_checks() {
+  gofmt -s -w .
+  goimports -w .
+  go vet ./...
+}
+
+run_angular_checks() {
+  bun run format
+  ng lint
+}
+
+run_svelte_checks() {
+  bun run format
+  bun run check
+}
+
+run_flutter_checks() {
+  dart format lib
+  dart analyze lib
+
+  if [ "$run_build_runner" -eq 1 ]; then
+    dart run build_runner build --delete-conflicting-outputs
+  fi
+}
+
+is_svelte_dir() {
+  [ -f "$1/svelte.config.js" ] ||
+    [ -f "$1/svelte.config.mjs" ] ||
+    [ -f "$1/svelte.config.cjs" ] ||
+    [ -f "$1/svelte.config.ts" ]
+}
+
+if [ -d server ] && { [ -f server/go.mod ] || find server -maxdepth 1 -name '*.go' -print -quit | grep -q .; }; then
+  run_in server run_server_checks
+fi
+
+while IFS= read -r angular_json; do
+  angular_dir="$(dirname "$angular_json")"
+  run_in "$angular_dir" run_angular_checks
+done < <(
+  find . \
+    -path './.git' -prune -o \
+    -path './node_modules' -prune -o \
+    -path './*/node_modules' -prune -o \
+    -path './*/.angular' -prune -o \
+    -name angular.json -print
+)
+
+while IFS= read -r package_json; do
+  svelte_dir="$(dirname "$package_json")"
+  if is_svelte_dir "$svelte_dir"; then
+    run_in "$svelte_dir" run_svelte_checks
+  fi
+done < <(
+  find . \
+    -path './.git' -prune -o \
+    -path './node_modules' -prune -o \
+    -path './*/node_modules' -prune -o \
+    -path './.svelte-kit' -prune -o \
+    -path './*/.svelte-kit' -prune -o \
+    -name package.json -print
+)
+
+if [ -d app ] && [ -f app/pubspec.yaml ] && [ -d app/lib ]; then
+  run_in app run_flutter_checks
+fi
+
+if [ "$ran_any" -eq 0 ]; then
+  printf "%sNo matching project folders found in %s%s\n" "$yellow" "$git_root" "$reset"
+else
+  printf "\n%sAll checks passed.%s\n" "$green" "$reset"
+fi
