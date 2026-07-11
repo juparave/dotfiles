@@ -5,7 +5,7 @@
 # Review the items in the trash before emptying it.
 #
 # Usage: deep_free_space.sh [--dry-run]
-#   --dry-run  Show what would be cleaned without actually doing it.
+#   --dry-run  Show automatic and optional cleanup candidates without changing anything.
 
 set -e # Exit immediately if a command exits with a non-zero status.
 
@@ -57,7 +57,11 @@ rm_path() {
             human=$(du -sh "$path" 2>/dev/null | awk '{print $1}')
             echo "  [dry-run] Would delete: $path ($human)"
         else
-            sudo rm -rf "$path" || true
+            if [[ "$path" == "/Users/$USER/"* ]]; then
+                rm -rf -- "$path" || true
+            else
+                sudo rm -rf -- "$path" || true
+            fi
             TOTAL_FREED=$((TOTAL_FREED + size))
         fi
     fi
@@ -70,8 +74,57 @@ maybe_run() {
     if $DRY_RUN; then
         echo "  [dry-run] Would run: $label"
     else
-        "$@"
+        if ! "$@"; then
+            echo "  Warning: cleanup failed and was skipped: $label" >&2
+        fi
     fi
+}
+
+# Show the size of a cleanup candidate and ask before running its cleanup command.
+# In dry-run mode, optional candidates are only reported; no prompt is shown.
+ask_to_run() {
+    local label="$1"
+    local size_path="$2"
+    shift 2
+
+    [ -e "$size_path" ] || return 0
+
+    local human
+    human=$(du -sh "$size_path" 2>/dev/null | awk '{print $1}')
+    human=${human:-unknown}
+
+    if $DRY_RUN; then
+        echo "  [review] $label: $size_path ($human)"
+        return 0
+    fi
+
+    read -r -p "$label ($human)? (y/N) " reply
+    if [[ $reply =~ ^[Yy]$ ]]; then
+        if ! "$@"; then
+            echo "  Warning: selected cleanup failed: $label" >&2
+        fi
+    fi
+}
+
+# Ask before permanently deleting application-managed data.
+ask_to_delete() {
+    local label="$1"
+    local path="$2"
+    ask_to_run "$label" "$path" rm_path "$path"
+}
+
+ask_to_trash() {
+    local label="$1"
+    local path="$2"
+    ask_to_run "$label" "$path" trash_path "$path"
+}
+
+delete_directory_contents() {
+    local directory="$1"
+    local entry
+    for entry in "$directory/"*; do
+        rm_path "$entry"
+    done
 }
 
 # Capture free disk space before cleanup
@@ -82,19 +135,23 @@ echo "Starting the cleanup process..."
 # --- Xcode ---
 echo "Cleaning Xcode caches and derived data..."
 trash_path "/Users/$USER/Library/Developer/Xcode/DerivedData"
-trash_path "/Users/$USER/Library/Developer/Xcode/Archives"
+ask_to_trash \
+    "Move Xcode Archives to Trash (keep archives needed for symbolication or distribution)" \
+    "/Users/$USER/Library/Developer/Xcode/Archives"
 trash_path "/Users/$USER/Library/Caches/com.apple.dt.Xcode"
 trash_path "/Users/$USER/Library/Developer/CoreSimulator/Caches"
 maybe_run "xcrun simctl delete unavailable" xcrun simctl delete unavailable
 
 # --- System & User Caches and Logs ---
 echo "Cleaning system and user caches and logs..."
-for entry in /Library/Caches/*; do
-    rm_path "$entry"
-done
-for entry in /private/var/log/*; do
-    rm_path "$entry"
-done
+ask_to_run \
+    "Delete system-wide application caches (administrator access required)" \
+    "/Library/Caches" \
+    delete_directory_contents "/Library/Caches"
+ask_to_run \
+    "Delete system logs (loses diagnostic history; administrator access required)" \
+    "/private/var/log" \
+    delete_directory_contents "/private/var/log"
 for cache_dir in "/Users/$USER/Library/Caches/"*; do
     for entry in "$cache_dir/"*; do
         rm_path "$entry"
@@ -114,6 +171,7 @@ fi
 if command -v npm &> /dev/null; then
     echo "Cleaning npm cache (will not delete globally installed packages)..."
     maybe_run "npm cache clean --force" npm cache clean --force
+    maybe_run "npm cache npx rm" npm cache npx rm
 fi
 
 # --- Yarn ---
@@ -124,20 +182,29 @@ fi
 
 # --- Node modules & JS framework caches ---
 echo "Cleaning node_modules and JS framework cache dirs under ~/workspace..."
-find ~/workspace -name "node_modules" -type d -prune -print0 | while IFS= read -r -d $'\0' dir; do
+while IFS= read -r -d $'\0' dir; do
     rm_path "$dir"
-done
+done < <(find ~/workspace -name "node_modules" -type d -prune -print0)
 for cache_name in ".angular" ".svelte-kit" ".nuxt" ".output" ".next" ".vite" ".turbo"; do
-    find ~/workspace -name "$cache_name" -type d -prune -print0 | while IFS= read -r -d $'\0' dir; do
+    while IFS= read -r -d $'\0' dir; do
         rm_path "$dir"
-    done
+    done < <(find ~/workspace -name "$cache_name" -type d -prune -print0)
 done
 
 # --- Go ---
 if command -v go &> /dev/null; then
-    echo "Cleaning Go build cache..."
+    echo "Cleaning Go build and module caches..."
     maybe_run "go clean -cache" go clean -cache
+    maybe_run "go clean -modcache" go clean -modcache
 fi
+
+# --- Gradle and cross-platform developer caches ---
+echo "Cleaning reproducible developer caches..."
+rm_path "/Users/$USER/.gradle/caches"
+rm_path "/Users/$USER/.gradle/daemon"
+for entry in "/Users/$USER/.cache/"*; do
+    rm_path "$entry"
+done
 
 # --- Pip ---
 if command -v pip &> /dev/null; then
@@ -147,7 +214,9 @@ fi
 
 # --- Safari ---
 echo "Cleaning Safari caches..."
-rm_path "/Users/$USER/Library/Safari/LocalStorage"
+ask_to_delete \
+    "Delete Safari website local storage (may sign you out or reset websites)" \
+    "/Users/$USER/Library/Safari/LocalStorage"
 rm_path "/Users/$USER/Library/Safari/WebKit/MediaCache"
 
 # --- Spotify ---
@@ -156,11 +225,18 @@ rm_path "/Users/$USER/Library/Application Support/Spotify/PersistentCache/Storag
 
 # --- Docker ---
 if command -v docker &> /dev/null; then
-    echo "Cleaning Docker unused data..."
+    echo "Reviewing Docker unused data..."
     if current_context=$(docker context show 2>/dev/null); then
         if endpoint=$(docker context inspect "$current_context" --format '{{.Endpoints.docker.Host}}' 2>/dev/null); then
             if [[ "$endpoint" == unix://* ]]; then
-                maybe_run "docker system prune -f" docker system prune -f
+                ask_to_run \
+                    "Remove stopped containers, unused networks/images, and build cache" \
+                    "/Users/$USER/Library/Containers/com.docker.docker" \
+                    docker system prune -f
+                ask_to_run \
+                    "Also remove unused Docker volumes (may contain database data)" \
+                    "/Users/$USER/Library/Containers/com.docker.docker" \
+                    docker volume prune -f
             else
                 echo "  Docker is using a remote context ($endpoint), skipping."
             fi
@@ -172,14 +248,43 @@ if command -v docker &> /dev/null; then
     fi
 fi
 
-# --- Memory ---
-echo "Purging system memory cache..."
-maybe_run "sudo purge" sudo purge
+# --- Optional large developer and application data ---
+echo "Reviewing optional large cleanup candidates..."
+
+if command -v xcrun &> /dev/null; then
+    ask_to_run \
+        "Delete all iOS Simulator devices and their data" \
+        "/Users/$USER/Library/Developer/CoreSimulator/Devices" \
+        xcrun simctl delete all
+fi
+
+ask_to_delete \
+    "Delete all Android virtual devices and emulator data" \
+    "/Users/$USER/.android/avd"
+ask_to_delete \
+    "Delete installed Android NDK versions (projects may need to download them again)" \
+    "/Users/$USER/Library/Android/sdk/ndk"
+ask_to_delete \
+    "Delete Android emulator system images (re-download through SDK Manager)" \
+    "/Users/$USER/Library/Android/sdk/system-images"
+ask_to_delete \
+    "Delete Claude Desktop's Cowork Linux VM (it will be downloaded again if needed)" \
+    "/Users/$USER/Library/Application Support/Claude/vm_bundles"
+
+echo "Reviewing downloads larger than 500 MB..."
+while IFS= read -r -d $'\0' file; do
+    ask_to_trash "Move this large download to Trash" "$file"
+done < <(find "/Users/$USER/Downloads" -type f -size +500M -print0 2>/dev/null)
 
 # --- Optional: Flutter Projects ---
 if command -v flutter &> /dev/null; then
-    read -p "Do you want to clean all Flutter projects found under ~/workspace? (y/N) " -n 1 -r
-    echo
+    REPLY=""
+    if $DRY_RUN; then
+        echo "  [review] Clean generated files in Flutter projects under ~/workspace"
+    else
+        read -r -p "Do you want to clean all Flutter projects found under ~/workspace? (y/N) " -n 1 REPLY
+        echo
+    fi
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo "Searching for Flutter projects under ~/workspace..."
         find ~/workspace -name "pubspec.yaml" \
