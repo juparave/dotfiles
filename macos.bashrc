@@ -53,33 +53,38 @@ fi
 
 ### Bash procedure to quickly change directory
 workon() {
+    local workspace_dirs=(
+        "$HOME/workspace/python"
+        "$HOME/workspace/go"
+        "$HOME/workspace/flutter"
+        "$HOME/workspace/angular"
+        "$HOME/workspace/svelte"
+        "$HOME/workspace/elm"
+    )
+
+    if [[ -d "$HOME/EVOworkspace" ]]; then
+        workspace_dirs+=(
+            "$HOME/EVOworkspace/xb"
+            "$HOME/EVOworkspace/python"
+            "$HOME/EVOworkspace/go"
+            "$HOME/EVOworkspace/flutter"
+            "$HOME/EVOworkspace/angular"
+            "$HOME/EVOworkspace/svelte"
+            "$HOME/EVOworkspace/php"
+        )
+    fi
+
     if [[ -n $1 ]]; then
-        selected=$(find ~/workspace/python ~/workspace/xb ~/workspace/go ~/workspace/flutter ~/workspace/angular ~/workspace/svelte ~/workspace/elm -mindepth 1 -maxdepth 1 -type d | fzf --query $1)
+        selected=$(find "${workspace_dirs[@]}" -mindepth 1 -maxdepth 1 -type d | fzf --query "$1")
     else
-        selected=$(find ~/workspace/python ~/workspace/xb ~/workspace/go ~/workspace/flutter ~/workspace/angular ~/workspace/svelte ~/workspace/elm -mindepth 1 -maxdepth 1 -type d | fzf)
+        selected=$(find "${workspace_dirs[@]}" -mindepth 1 -maxdepth 1 -type d | fzf)
     fi
 
     if [[ -z $selected ]]; then
         return 0
     fi
 
-    cd $selected
-    actvenv
-}
-
-evoworkon() {
-    WS=~/EVOworkspace
-    if [[ -n $1 ]]; then
-        selected=$(find $WS/xb $WS/python $WS/go $WS/flutter $WS/angular $WS/svelte $WS/php -mindepth 1 -maxdepth 1 -type d | fzf --query $1)
-    else
-        selected=$(find $WS/xb $WS/python $WS/go $WS/flutter $WS/angular $WS/svelte $WS/php -mindepth 1 -maxdepth 1 -type d | fzf)
-    fi
-
-    if [[ -z $selected ]]; then
-        return 0
-    fi
-
-    cd $selected
+    cd "$selected"
     actvenv
 }
 
