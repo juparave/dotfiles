@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Check if DEEPSEEK_API_KEY is set
+if [ -z "$QWEN_TOKEN_PLAN_API_KEY" ]; then
+    echo "Error: QWEN_TOKEN_PLAN_API_KEY is not set" >&2
+    exit 1
+fi
+
+# Set environment variables for DeepSeek API compatibility
+export ANTHROPIC_BASE_URL=https://token-plan.ap-southeast-1.maas.aliyuncs.com/apps/anthropic
+export ANTHROPIC_AUTH_TOKEN=${QWEN_TOKEN_PLAN_API_KEY}
+export API_TIMEOUT_MS=3000000
+export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
+export ANTHROPIC_MODEL=qwen3.8-max
+export ANTHROPIC_SMALL_FAST_MODEL=qwen3.6-flash
+export CLAUDE_CODE_AUTO_COMPACT_WINDOW=1000000
+export CLAUDE_CODE_SUBAGENT_MODEL="qwen3.7-max"
+export CLAUDE_CODE_MAX_CONTEXT_TOKENS=983616
+export ANTHROPIC_DEFAULT_SONNET_MODEL="qwen3.8-max"
+export ANTHROPIC_DEFAULT_OPUS_MODEL="qwen3.8-max"
+export ANTHROPIC_DEFAULT_HAIKU_MODEL="qwen3.6-flash"
+
+echo "Environment variables set for QWEN TOKEN PLAN API compatibility"
+echo "Running claude with QWEN TOKEN PLAN configuration..."
+
+# Run claude command with all passed arguments
+claude "$@"
