@@ -19,6 +19,7 @@ export CLAUDE_CODE_MAX_CONTEXT_TOKENS=983616
 export ANTHROPIC_DEFAULT_SONNET_MODEL="qwen3.8-max"
 export ANTHROPIC_DEFAULT_OPUS_MODEL="qwen3.8-max"
 export ANTHROPIC_DEFAULT_HAIKU_MODEL="qwen3.6-flash"
+export MAX_THINKING_TOKENS=20000
 
 echo "Environment variables set for QWEN TOKEN PLAN API compatibility"
 echo "Running claude with QWEN TOKEN PLAN configuration..."
