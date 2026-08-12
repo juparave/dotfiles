@@ -60,6 +60,7 @@ workon() {
         "$HOME/workspace/angular"
         "$HOME/workspace/svelte"
         "$HOME/workspace/elm"
+        "$HOME/workspace/xb"
     )
 
     if [[ -d "$HOME/EVOworkspace" ]]; then
