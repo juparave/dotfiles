@@ -40,11 +40,11 @@ return require('packer').startup(function(use)
 
     -- use 'arcticicestudio/nord-vim'
 
-    use('nvim-treesitter/nvim-treesitter', {
-        -- run = ":TSUpdate",
+    use {
+        'nvim-treesitter/nvim-treesitter',
         branch = 'main',
-        run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
-    })
+        run = ':TSUpdate',
+    }
     -- use 'nvim-treesitter/playground'
     -- use 'nvim-treesitter/nvim-treesitter-context'
 
