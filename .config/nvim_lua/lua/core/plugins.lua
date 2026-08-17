@@ -185,17 +185,14 @@ return require('packer').startup(function(use)
     use { "zbirenbaum/copilot.lua" }
 
     -- Copilot Chat
+    -- Setup lives in core/plugin_config/copilot_chat.lua
     use {
         "CopilotC-Nvim/CopilotChat.nvim",
-        dependencies = {
+        requires = {
             { "zbirenbaum/copilot.lua" },
-            { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+            { "nvim-lua/plenary.nvim" }, -- for curl, log and async functions
         },
-        build = "make tiktoken",                            -- Only on MacOS or Linux
-        opts = {
-            -- See Configuration section for options
-        },
-        -- See Commands section for default commands if you want to lazy load on them
+        run = "make tiktoken",           -- Only on MacOS or Linux
     }
 
     -- Automatically set up your configuration after cloning packer.nvim
