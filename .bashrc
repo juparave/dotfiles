@@ -96,6 +96,30 @@ actvenv() {
     fi
 }
 
+### Pending gotodo indicator
+# bash-git-prompt (sourced from ~/.bash_profile) calls prompt_callback() on
+# every prompt and splices the output in between the path and the git status.
+# We use it to flag open todos in the current repo, e.g.  ~/.dotfiles ☐3 [main ✔]
+GIT_PROMPT_TODO_SYMBOL="☐"
+prompt_callback() {
+    # Walk up for a .gotodo.json first: that is pure bash, so repos without a
+    # todo list pay nothing and we only fork gotodo where there is one to count.
+    local dir="$PWD" file=""
+    while [[ -n $dir ]]; do
+        if [[ -f "$dir/.gotodo.json" ]]; then
+            file="$dir/.gotodo.json"
+            break
+        fi
+        dir="${dir%/*}"
+    done
+    [[ -n $file ]] || return
+    command -v gotodo >/dev/null 2>&1 || return
+    local n
+    n=$(gotodo count --file "$file" 2>/dev/null) || return
+    [[ $n =~ ^[0-9]+$ ]] && (( n > 0 )) || return
+    printf ' %s%s%s%s' "$BoldYellow" "$GIT_PROMPT_TODO_SYMBOL" "$n" "$ResetColor"
+}
+
 ### Prompt
 export PS1="\[$(tput setaf 5)\]\u\[$(tput sgr0)\] at \[$(tput setaf 3)\]\h\[$(tput sgr0)\] in \[$(tput bold)\]\[$(tput setaf 2)\]\w\n\[$(tput sgr0)\]↳ \\$ \[$(tput sgr0)\]"
 ## Shortening paths in the Bash prompt
