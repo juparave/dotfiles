@@ -100,6 +100,28 @@ Stream<User?> authState(Ref ref) {
 ## Code Generation Setup
 
 ### Dependencies (pubspec.yaml)
+
+**Riverpod 3.x (current, as of mid-2025+)**:
+```yaml
+dependencies:
+  flutter_riverpod: ^3.0.0
+  riverpod_annotation: ^4.0.0
+
+dev_dependencies:
+  build_runner: ^2.4.0
+  riverpod_generator: ^4.0.0
+  riverpod_lint: ^3.0.0
+```
+Note: `riverpod_lint` 3.x depends directly on `analyzer_plugin`, not on the standalone
+`custom_lint` package. Do **not** add `custom_lint` to pubspec — it will fail to resolve
+against `riverpod_lint` 3.1.8+. Register the plugin in `analysis_options.yaml` instead:
+```yaml
+analyzer:
+  plugins:
+    - riverpod_lint
+```
+
+**Riverpod 2.x (legacy)**:
 ```yaml
 dependencies:
   flutter_riverpod: ^2.5.0
@@ -110,6 +132,12 @@ dev_dependencies:
   riverpod_generator: ^2.4.0
   custom_lint: ^0.6.0
   riverpod_lint: ^2.3.0
+```
+Here `custom_lint` IS required as a separate dependency, and `analysis_options.yaml` uses:
+```yaml
+analyzer:
+  plugins:
+    - custom_lint
 ```
 
 ### File Template
