@@ -14,7 +14,8 @@ copilot_chat.setup({
 	-- :lua require('CopilotChat').select_model()
 	-- NOTE: "Model not found: <x>" almost always means auth/model-fetch failed
 	-- (empty model list), not a bad id. Check :CopilotChatLog for the real error.
-	model = "gpt-5.4-mini",
+	-- model = "gpt-5.4-mini",
+	model = "gpt-6-luna",
 
 	-- Default context settings
 	context = "buffers",
