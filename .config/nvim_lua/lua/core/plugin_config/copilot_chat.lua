@@ -174,3 +174,29 @@ vim.keymap.set("n", "<leader>ch", function()
 	vim.cmd("CopilotChat")
 	vim.cmd("help CopilotChat")
 end, vim.tbl_extend("force", opts, { desc = "CopilotChat - Show help" }))
+
+-- One-shot: staged diff -> Copilot -> prefilled fugitive commit buffer
+vim.keymap.set("n", "<leader>gm", function()
+	local chat = require("CopilotChat")
+	vim.notify("Generating commit message…")
+	chat.ask("#gitdiff:staged\n\n" .. chat.config.prompts.Commit.prompt, {
+		headless = true, -- no chat window
+		callback = function(response)
+			local text = type(response) == "table" and response.content or response
+			local msg = text:match("```gitcommit\n(.-)\n```") or text:match("```%w*\n(.-)\n```") or text
+			local lines = vim.split(vim.trim(msg), "\n")
+			vim.schedule(function()
+				vim.api.nvim_create_autocmd("FileType", {
+					pattern = "gitcommit",
+					once = true,
+					callback = function(a)
+						vim.schedule(function()
+							vim.api.nvim_buf_set_lines(a.buf, 0, 1, false, lines) -- replace empty first line
+						end)
+					end,
+				})
+				vim.cmd("Git commit --verbose")
+			end)
+		end,
+	})
+end, { noremap = true, silent = true, desc = "Copilot commit message -> fugitive" })
